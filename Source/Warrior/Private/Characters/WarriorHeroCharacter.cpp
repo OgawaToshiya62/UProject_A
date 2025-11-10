@@ -7,7 +7,7 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
-#include "WarriorDebugHelper.h"
+#include "WarriorDebugHelper.h"     // DebugHelperをインクルード
 
 AWarriorHeroCharacter::AWarriorHeroCharacter()
 {
@@ -37,7 +37,7 @@ AWarriorHeroCharacter::AWarriorHeroCharacter()
 
 void AWarriorHeroCharacter::BeginPlay()
 {
-	Super::BeginPlay();
+	Super::BeginPlay();                // 親クラスの BeginPlay を呼び出す (必須)
 
-	Debug::Print(TEXT("Working"));
+	Debug::Print(TEXT("Working"));     // デバッグメッセージを表示
 }
