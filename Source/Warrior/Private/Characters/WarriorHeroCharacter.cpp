@@ -11,10 +11,10 @@
 
 AWarriorHeroCharacter::AWarriorHeroCharacter()
 {
-	// カプセルコンポーネントのサイズ
+	// カプセルコンポーネントのサイズ(当たり判定 半径42 高さ96)
 	GetCapsuleComponent() -> InitCapsuleSize(42.f, 96.f);
 
-	// コントローラーの回転
+	// コントローラーの回転 キャラクターの移動方向に合わせて自動で向きを変えたいため false に設定
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
 	bUseControllerRotationRoll = false;
