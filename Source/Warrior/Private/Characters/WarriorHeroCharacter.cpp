@@ -19,20 +19,20 @@ AWarriorHeroCharacter::AWarriorHeroCharacter()
 	bUseControllerRotationYaw = false;
 	bUseControllerRotationRoll = false;
 
-	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
-	CameraBoom -> SetupAttachment(GetRootComponent());
-	CameraBoom -> TargetArmLength = 200.f;
-	CameraBoom -> SocketOffset = FVector(0.f, 55.f, 65.f);
-	CameraBoom -> bUsePawnControlRotation = true;
+	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));     // キャラクターにUSpringArmComponent(スプリングアーム)を追加
+	CameraBoom -> SetupAttachment(GetRootComponent());                                // CameraBoomをキャラクターのルートコンポーネントにアタッチ
+	CameraBoom -> TargetArmLength = 200.f;                                            // カメラとキャラクターの距離を設定(200cm = 2m)
+	CameraBoom -> SocketOffset = FVector(0.f, 55.f, 65.f);                            // カメラの位置を調整
+	CameraBoom -> bUsePawnControlRotation = true;                                     // プレイヤーのコントローラーの回転に合わせてカメラの向きが変わるようにする
 
-	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
-	FollowCamera -> SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
-	FollowCamera -> bUsePawnControlRotation = false;
+	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));    // キャラクターにUCameraComponent(カメラ)を追加 プレイヤーの視点
+	FollowCamera -> SetupAttachment(CameraBoom, USpringArmComponent::SocketName);     // カメラをCameraBoom(スプリングアーム)にアタッチ SocketNameはスプリングアームの先端にあるsocketの名前
+	FollowCamera -> bUsePawnControlRotation = false;                                  // カメラがプレイヤーのコントローラーの回転に従うかどうかの設定 falseにしているためカメラの回転はスプリングアームに追従する
 
-	GetCharacterMovement() -> bOrientRotationToMovement = true;
-	GetCharacterMovement() -> RotationRate = FRotator(0.f, 500.f, 0.f);
-	GetCharacterMovement() -> MaxWalkSpeed = 400.f;
-	GetCharacterMovement() -> BrakingDecelerationWalking = 2000.f;
+	GetCharacterMovement() -> bOrientRotationToMovement = true;                       // キャラクターが移動方向に自動で向きを変える
+	GetCharacterMovement() -> RotationRate = FRotator(0.f, 500.f, 0.f);               // キャラクターが方向転換する速度
+	GetCharacterMovement() -> MaxWalkSpeed = 400.f;                                   // キャラクターの最大歩行速度
+	GetCharacterMovement() -> BrakingDecelerationWalking = 2000.f;                    // キャラクターが止まるときの減速力
 }
 
 void AWarriorHeroCharacter::BeginPlay()

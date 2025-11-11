@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "NativeGameplayTags.h"
+#include "NativeGameplayTags.h"     // GameplayTagをC++で扱うためのヘッダファイル
 
 namespace WarriorGameplayTags
 {
