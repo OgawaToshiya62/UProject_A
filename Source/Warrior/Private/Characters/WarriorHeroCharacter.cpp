@@ -6,6 +6,10 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "EnhancedInputSubsystems.h"
+#include "DataAssets/Input/DataAsset_InputConfig.h"
+#include "Components/Input/WarriorInputComponent.h"
+#include "WarriorGameplayTags.h"
 
 #include "WarriorDebugHelper.h"     // DebugHelperをインクルード
 
@@ -35,9 +39,30 @@ AWarriorHeroCharacter::AWarriorHeroCharacter()
 	GetCharacterMovement() -> BrakingDecelerationWalking = 2000.f;                    // キャラクターが止まるときの減速力
 }
 
+void AWarriorHeroCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)     //
+{
+	checkf(InputConfigUDataAsset, TEXT("Forgot to assign a valid data asset as input config"));
+
+	ULocalPlayer* LocalPlayer = GetController<APlayerController>() -> GetLocalPlayer();
+
+	UEnhancedInputLocalPlayerSubsystem* subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(LocalPlayer);
+
+	check(subsystem);
+
+	subsystem -> AddMappingContext(InputConfigUDataAsset -> DefaultMappingContext, 0);
+
+	UWarriorInputComponent* WarriorInputComponent = CastChecked<UWarriorInputComponent>(PlayerInputComponent);
+
+	WarriorInputComponent->BindNativeInputAction(InputConfigUDataAsset, WarriorGameplayTags::InputTag_Move, ETriggerEvent::Triggered, this, &ThisClass::Input_Move);
+}
+
 void AWarriorHeroCharacter::BeginPlay()
 {
 	Super::BeginPlay();                // 親クラスの BeginPlay を呼び出す (必須)
 
 	Debug::Print(TEXT("Working"));     // デバッグメッセージを表示
+}
+
+void AWarriorHeroCharacter::Input_Move(const FInputActionValue& InputActionValue)     //
+{
 }
