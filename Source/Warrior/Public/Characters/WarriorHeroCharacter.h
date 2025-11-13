@@ -41,10 +41,11 @@ private:
 
 #pragma region Inputs
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "CharacterData", meta = (AllowPrivateAccess = "true"))     //
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "CharacterData", meta = (AllowPrivateAccess = "true"))     //
 	UDataAsset_InputConfig* InputConfigUDataAsset;
 
 	void Input_Move(const FInputActionValue& InputActionValue);
+	void Input_Look(const FInputActionValue& InputActionValue);
 
 #pragma endregion
 
