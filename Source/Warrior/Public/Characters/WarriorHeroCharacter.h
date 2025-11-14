@@ -22,11 +22,12 @@ class WARRIOR_API AWarriorHeroCharacter : public AWarriorBaseCharacter
 public:
 	AWarriorHeroCharacter();
 
-protected:
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;     //
-	virtual void BeginPlay() override;
+protected:     // 親クラスと子クラスからアクセス可能にする
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;     // プレイヤーの入力(キーバードなど)をキャラクターにバインドする関数 Overrideは親クラスで定義された関数を上書きして使うと言った意味
+	virtual void BeginPlay() override;                                                                // ゲーム開始時(レベルにスポーンした瞬間)に呼ばれる初期化関数
 
 private:
+	// #pragma region はVisualStudio上でコードを折りたたみ見やすくするため
 #pragma region Components
 
 	// スプリングアーム (VisibleAnywhere エディタで見えるが変更不可、BlueprintReadOnly Blueprintから読み取り可能　AllowPrivateAccess="true" Blueprintでアクセス出来るようにするためのメタ設定)
@@ -41,11 +42,11 @@ private:
 
 #pragma region Inputs
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "CharacterData", meta = (AllowPrivateAccess = "true"))     //
-	UDataAsset_InputConfig* InputConfigUDataAsset;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "CharacterData", meta = (AllowPrivateAccess = "true"))     // EditDefaultsOnly BPでクラスのデフォルト値のみ編集可能 BlueprintReadOnly BPから読み取りができるが書き換え不可 AllowPrivateAccess BPからpribateでもみえるようにする補足設定
+	UDataAsset_InputConfig* InputConfigUDataAsset;                                                                       // UDataAsset_InputConfig UDataAssetを継承したクラス InputConfigUDataAssetは変数名
 
-	void Input_Move(const FInputActionValue& InputActionValue);
-	void Input_Look(const FInputActionValue& InputActionValue);
+	void Input_Move(const FInputActionValue& InputActionValue);                                                          // プレイヤーの移動(Move)入力を処理する関数の宣言
+	void Input_Look(const FInputActionValue& InputActionValue);                                                          // プレイヤーの視点(Look)入力を処理する関数の宣言
 
 #pragma endregion
 

@@ -39,22 +39,22 @@ AWarriorHeroCharacter::AWarriorHeroCharacter()
 	GetCharacterMovement() -> BrakingDecelerationWalking = 2000.f;                    // キャラクターが止まるときの減速力
 }
 
-void AWarriorHeroCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)     //
+void AWarriorHeroCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)        // AWarriorHeroCharacter クラスのメンバー関数 SetupPlayerInputComponent プレイヤーの入力をキャラクターにバインドする為 UInputComponent*PlayerInputCompoent 入力をバインドする対象のコンポーネント
 {
-	checkf(InputConfigUDataAsset, TEXT("Forgot to assign a valid data asset as input config"));
+	checkf(InputConfigUDataAsset, TEXT("Forgot to assign a valid data asset as input config"));     // InputConfigUDataAsset nullだった場合この行でクラッシュしてTEXTのエラーメッセージが表示
 
-	ULocalPlayer* LocalPlayer = GetController<APlayerController>() -> GetLocalPlayer();
+	ULocalPlayer* LocalPlayer = GetController<APlayerController>() -> GetLocalPlayer();             // GetController<APlayerController> このキャラクターのコントローラー(プレイヤー操作の元)を取得
 
-	UEnhancedInputLocalPlayerSubsystem* subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(LocalPlayer);
+	UEnhancedInputLocalPlayerSubsystem* subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(LocalPlayer);     // UEnhancedInputLocalPlayerSubsystem EnhancedInputをお使うためのサブシステム GetSubsystem<>() 指定した型のサブシステムを取得する関数
 
-	check(subsystem);
+	check(subsystem);                                                                               // 上に合ったcheckfと同じ感じ subsystemがnullだった場合クラッシュを知らせる
 
-	subsystem -> AddMappingContext(InputConfigUDataAsset -> DefaultMappingContext, 0);
+	subsystem -> AddMappingContext(InputConfigUDataAsset -> DefaultMappingContext, 0);              // 入力マッピングコンテキストを登録する処理 InputConfigUDataAsset 入力設定を格納したデータアセット DefaultMappingContext その中で定義された基本入力マッピング
 
-	UWarriorInputComponent* WarriorInputComponent = CastChecked<UWarriorInputComponent>(PlayerInputComponent);
+	UWarriorInputComponent* WarriorInputComponent = CastChecked<UWarriorInputComponent>(PlayerInputComponent);     // プレイヤーの入力コンポーネントをWarrior用の拡張型に変換 CastChecked 型変換を行い失敗したらクラッシュを知らせる 
 
-	WarriorInputComponent->BindNativeInputAction(InputConfigUDataAsset, WarriorGameplayTags::InputTag_Move, ETriggerEvent::Triggered, this, &ThisClass::Input_Move);
-	WarriorInputComponent->BindNativeInputAction(InputConfigUDataAsset, WarriorGameplayTags::InputTag_Look, ETriggerEvent::Triggered, this, &ThisClass::Input_Look);
+	WarriorInputComponent->BindNativeInputAction(InputConfigUDataAsset, WarriorGameplayTags::InputTag_Move, ETriggerEvent::Triggered, this, &ThisClass::Input_Move);     // InputConfigUDataAsset 入力設定アセット InputTag 意味を持った入力識別子 ETriggerEvent 入力が発生した瞬間に反応する this このキャラクター自身 &ThisClass:: 呼び出す関数ポインタ
+	WarriorInputComponent->BindNativeInputAction(InputConfigUDataAsset, WarriorGameplayTags::InputTag_Look, ETriggerEvent::Triggered, this, &ThisClass::Input_Look);     // 上と同じ感じ
 }
 
 void AWarriorHeroCharacter::BeginPlay()
@@ -64,38 +64,38 @@ void AWarriorHeroCharacter::BeginPlay()
 	Debug::Print(TEXT("Working"));     // デバッグメッセージを表示
 }
 
-void AWarriorHeroCharacter::Input_Move(const FInputActionValue& InputActionValue)     //
+void AWarriorHeroCharacter::Input_Move(const FInputActionValue& InputActionValue)
 {
-	const FVector2D MovementVector = InputActionValue.Get<FVector2D>();
+	const FVector2D MovementVector = InputActionValue.Get<FVector2D>();                             // プレイヤーがどの方向に動こうとしているかを取得
 
-	const FRotator MovementRotation(0.f, Controller->GetControlRotation().Yaw, 0.f);
+	const FRotator MovementRotation(0.f, Controller->GetControlRotation().Yaw, 0.f);                // プレイヤーが向いて言うる方向に合わせて移動ベクトルを回転させる準備
 
-	if (MovementVector.Y != 0.f)
+	if (MovementVector.Y != 0.f)                                                                    // 前後移動の入力値　0.fで無い場合
 	{
-		const FVector ForwardDirection = MovementRotation.RotateVector(FVector::ForwardVector);
+		const FVector ForwardDirection = MovementRotation.RotateVector(FVector::ForwardVector);     // MovementRotation.RotateVector(...) プレイヤーの視点(Yaw)に合わせて前方向ベクトルを計算 FVector::ForwardVector ワールドの前方向
 
-		AddMovementInput(ForwardDirection, MovementVector.Y);
+		AddMovementInput(ForwardDirection, MovementVector.Y);                                       // 前後方向の入力に応じてキャラクターを動かす ForwardDirection 動くべき方向 MovementVector.Y 動く強さ
 	}
 
-	if (MovementVector.X != 0.f)
+	if (MovementVector.X != 0.f)                                                                    // 左右移動の入力値　0.fで無い場合
 	{
-		const FVector RightDirection = MovementRotation.RotateVector(FVector::RightVector);
+		const FVector RightDirection = MovementRotation.RotateVector(FVector::RightVector);         // FVector::RightVector ワールドの右方向
 
-		AddMovementInput(RightDirection, MovementVector.X);
+		AddMovementInput(RightDirection, MovementVector.X);                                         // 左右方向の入力に応じてキャラクターを動かす
 	}
 }
 
 void AWarriorHeroCharacter::Input_Look(const FInputActionValue& InputActionValue)
 {
-	const FVector2D LookAxisVector = InputActionValue.Get<FVector2D>();
+	const FVector2D LookAxisVector = InputActionValue.Get<FVector2D>();                             // プレイヤーがどの方向に視点を動かそうとしているかを取得 InputActionValueからFVector2D型の値を取得
 
-	if (LookAxisVector.X != 0.f)
+	if (LookAxisVector.X != 0.f)                                                                    // 左右方向(Yaw方向)の入力があるかの確認 0.fで無い場合処理を実行
 	{
-		AddControllerYawInput(LookAxisVector.X);
+		AddControllerYawInput(LookAxisVector.X);                                                    // 左右方向(Yaw方向)の入力に回転させる処理
 	}
 
-	if (LookAxisVector.Y != 0.f)
+	if (LookAxisVector.Y != 0.f)                                                                    // 上下方向(Pitch方向)の入力があるかの確認 0.fで無い場合処理を実行
 	{
-		AddControllerPitchInput(LookAxisVector.Y);
+		AddControllerPitchInput(LookAxisVector.Y);                                                  // 上下方向(Pitch方向)の入力に回転させる処理
 	}
 }
