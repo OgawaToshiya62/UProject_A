@@ -4,10 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "AbilitySystemInterface.h"
 #include "WarriorBaseCharacter.generated.h"
 
+class UWarriorAbilitySystemComponent;
+class UWarriorAttributeSet;
+
 UCLASS()
-class WARRIOR_API AWarriorBaseCharacter : public ACharacter
+class WARRIOR_API AWarriorBaseCharacter : public ACharacter, public IAbilitySystemInterface
 {
 	GENERATED_BODY()
 
@@ -15,4 +19,27 @@ public:
 	// Sets default values for this character's properties
 	AWarriorBaseCharacter();
 
+	//~ Begin IAbilitySystemInterface Interface.
+	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const;     // Gameplay Ability System に対応するためのインターフェース関数
+	//~ End IAbilitySystemInterface Interface
+
+protected:
+	//~ Begin APawn Interface.
+	virtual void PossessedBy(AController* NewController) override;     // キャラクターが Controller に所有されたときに呼ばれる処理（能力システムの初期化などに使用）
+	//~ End APawn Interface
+
+	// キャラクターの能力（スキルなど）を管理するコンポーネント
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AbilitySystem")
+	UWarriorAbilitySystemComponent* WarriorAbilitySystemComponent;
+
+	// キャラクターの属性（体力・攻撃力など）を保持するセット
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AbilitySystem")
+	UWarriorAttributeSet* WarriorAttributeSet;
+
+public:
+	// キャラクターの能力システムコンポーネントへのアクセス関数
+	FORCEINLINE UWarriorAbilitySystemComponent* GetWarriorAbilitySystemComponent() const { return WarriorAbilitySystemComponent; }
+
+	// キャラクターの属性セットへのアクセス関数（体力・攻撃力など）
+	FORCEINLINE UWarriorAttributeSet* GetWarriorAttributeSet() const { return WarriorAttributeSet; }
 };

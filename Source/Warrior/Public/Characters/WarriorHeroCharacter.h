@@ -23,6 +23,10 @@ public:
 	AWarriorHeroCharacter();
 
 protected:     // 親クラスと子クラスからアクセス可能にする
+	//~ Begin APawn Interface.
+	virtual void PossessedBy(AController* NewController) override;     // キャラクターが Controller に所有されたときに呼ばれる処理（能力システムの初期化などに使用）
+	//~ End APawn Interface
+
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;     // プレイヤーの入力(キーバードなど)をキャラクターにバインドする関数 Overrideは親クラスで定義された関数を上書きして使うと言った意味
 	virtual void BeginPlay() override;                                                                // ゲーム開始時(レベルにスポーンした瞬間)に呼ばれる初期化関数
 

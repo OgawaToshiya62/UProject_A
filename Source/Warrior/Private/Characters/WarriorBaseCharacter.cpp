@@ -2,6 +2,8 @@
 
 
 #include "Characters/WarriorBaseCharacter.h"
+#include "AbilitySystem/WarriorAbilitySystemComponent.h"
+#include "AbilitySystem/WarriorAttributeSet.h"
 
 // Sets default values
 AWarriorBaseCharacter::AWarriorBaseCharacter()
@@ -12,4 +14,27 @@ AWarriorBaseCharacter::AWarriorBaseCharacter()
 	PrimaryActorTick.bStartWithTickEnabled = false;     // 起動時Tickを無効化した状態で開始 bCanEverTickがfalseなら意味がないが保険的に併用
 
 	GetMesh() -> bReceivesDecals = false;               // キャラクターのメッシュがデカール(地面に投影されるVFX)を受け取らないようにする
+
+	// キャラクターの能力管理用コンポーネントを生成（スキルやアビリティの制御に使用）
+	WarriorAbilitySystemComponent = CreateDefaultSubobject<UWarriorAbilitySystemComponent>(TEXT("WarriorAbilitySystemComponent"));
+
+	// キャラクターの属性セット（体力・攻撃力など）を生成し、能力システムと連携
+	WarriorAttributeSet = CreateDefaultSubobject<UWarriorAttributeSet>(TEXT("WarriorAttributeSet"));
+}
+
+// GameplayAbilitySystem に準拠するための AbilitySystemComponent 取得関数
+UAbilitySystemComponent* AWarriorBaseCharacter::GetAbilitySystemComponent() const
+{
+	return GetWarriorAbilitySystemComponent();
+}
+
+// キャラクターが Controller に所有されたとき、能力システムに自身の情報を初期化
+void AWarriorBaseCharacter::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+
+	if (WarriorAbilitySystemComponent)
+	{
+		WarriorAbilitySystemComponent->InitAbilityActorInfo(this, this);
+	}
 }

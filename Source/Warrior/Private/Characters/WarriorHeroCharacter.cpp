@@ -10,6 +10,7 @@
 #include "DataAssets/Input/DataAsset_InputConfig.h"
 #include "Components/Input/WarriorInputComponent.h"
 #include "WarriorGameplayTags.h"
+#include "AbilitySystem/WarriorAbilitySystemComponent.h"
 
 #include "WarriorDebugHelper.h"     // DebugHelperをインクルード
 
@@ -39,6 +40,22 @@ AWarriorHeroCharacter::AWarriorHeroCharacter()
 	GetCharacterMovement() -> BrakingDecelerationWalking = 2000.f;                    // キャラクターが止まるときの減速力
 }
 
+// キャラクターが Controller に所有されたときに呼ばれる処理（能力システムの初期化や確認に使用）
+void AWarriorHeroCharacter::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+
+	// 能力システムと属性セットが有効であることを確認
+	if (WarriorAbilitySystemComponent && WarriorAttributeSet)
+	{
+		// 能力システムの所有者とアバターの名前を整形してデバッグ用文字列に格納
+		const FString ASCText = FString::Printf(TEXT("Owner Actor: %s, AvatarActor: %s"), *WarriorAbilitySystemComponent->GetOwnerActor()->GetActorLabel(), *WarriorAbilitySystemComponent->GetAvatarActor()->GetActorLabel());
+		// 能力システムと属性セットが有効であることをデバッグ出力（所有者とアバターの情報付き）
+		Debug::Print(TEXT("Ability system component valid.") + ASCText, FColor::Green);
+		Debug::Print(TEXT("AttributeSet valid.") + ASCText, FColor::Green);
+	}
+}
+
 void AWarriorHeroCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)        // AWarriorHeroCharacter クラスのメンバー関数 SetupPlayerInputComponent プレイヤーの入力をキャラクターにバインドする為 UInputComponent*PlayerInputCompoent 入力をバインドする対象のコンポーネント
 {
 	checkf(InputConfigUDataAsset, TEXT("Forgot to assign a valid data asset as input config"));     // InputConfigUDataAsset nullだった場合この行でクラッシュしてTEXTのエラーメッセージが表示
@@ -60,8 +77,6 @@ void AWarriorHeroCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 void AWarriorHeroCharacter::BeginPlay()
 {
 	Super::BeginPlay();                // 親クラスの BeginPlay を呼び出す (必須)
-
-	Debug::Print(TEXT("Working"));     // デバッグメッセージを表示
 }
 
 void AWarriorHeroCharacter::Input_Move(const FInputActionValue& InputActionValue)
