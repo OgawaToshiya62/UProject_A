@@ -23,9 +23,9 @@ class WARRIOR_API UWarriorGameplayAbility : public UGameplayAbility
 protected:
 	//~ Begin UGameplayAbility Interface.
 	// アビリティがキャラクターに付与されたときに呼ばれる処理（初期化など）
-	virtual void OnGiveAbility(const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilitySpec& Spec);
+	virtual void OnGiveAbility(const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilitySpec& Spec) override;
 	// アビリティが終了するときに呼ばれる処理（キャンセルや終了時の後処理
-	virtual void EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled);
+	virtual void EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled) override;
 	//~ End UGameplayAbility Interface
 
 	// アビリティの発動タイミングを決める（トリガー時か付与時か）
