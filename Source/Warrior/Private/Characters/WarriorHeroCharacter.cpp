@@ -12,6 +12,7 @@
 #include "WarriorGameplayTags.h"
 #include "AbilitySystem/WarriorAbilitySystemComponent.h"
 #include "DataAssets/StartUpData/DataAsset_HeroStartUpData.h"
+#include "Components/Combat/HeroCombatComponent.h"
 
 #include "WarriorDebugHelper.h"     // DebugHelperをインクルード
 
@@ -39,6 +40,8 @@ AWarriorHeroCharacter::AWarriorHeroCharacter()
 	GetCharacterMovement() -> RotationRate = FRotator(0.f, 500.f, 0.f);               // キャラクターが方向転換する速度
 	GetCharacterMovement() -> MaxWalkSpeed = 400.f;                                   // キャラクターの最大歩行速度
 	GetCharacterMovement() -> BrakingDecelerationWalking = 2000.f;                    // キャラクターが止まるときの減速力
+
+	HeroCombatComponent = CreateDefaultSubobject<UHeroCombatComponent>(TEXT("HeroCombatComponent"));     // キャラクターに戦闘コンポーネントを生成し、"HeroCombatComponent" という名前で登録
 }
 
 // キャラクターが Controller に所有されたときに呼ばれる処理（能力システムの初期化や確認に使用）
