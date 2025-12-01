@@ -19,7 +19,7 @@ class WARRIOR_API UDataAsset_StartUpDataBase : public UDataAsset
 
 public:
 	// 指定された AbilitySystemComponent にアビリティを付与する
-	virtual void GiveToAbilitySystemComponent(UWarriorAbilitySystemComponent* InWarriorASCToGive, int32 ApplyLevel = 1);
+	virtual void GiveToAbilitySystemComponent(UWarriorAbilitySystemComponent* InASCToGive, int32 ApplyLevel = 1);
 	
 protected:
 	// 付与された瞬間に自動発動するアビリティのリスト
@@ -31,5 +31,5 @@ protected:
 	TArray< TSubclassOf < UWarriorGameplayAbility > > ReactiveAbilities;
 
 	// 指定されたアビリティ群を AbilitySystemComponent に付与する処理
-	void GrantAbilities(const TArray< TSubclassOf < UWarriorGameplayAbility > >& InAbilitiesToGive, UWarriorAbilitySystemComponent* InWarriorASCToGive, int32 ApplyLevel = 1);
+	void GrantAbilities(const TArray< TSubclassOf < UWarriorGameplayAbility > >& InAbilitiesToGive, UWarriorAbilitySystemComponent* InASCToGive, int32 ApplyLevel = 1);
 };

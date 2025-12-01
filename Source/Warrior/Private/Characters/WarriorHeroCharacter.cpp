@@ -11,6 +11,7 @@
 #include "Components/Input/WarriorInputComponent.h"
 #include "WarriorGameplayTags.h"
 #include "AbilitySystem/WarriorAbilitySystemComponent.h"
+#include "DataAssets/StartUpData/DataAsset_HeroStartUpData.h"
 
 #include "WarriorDebugHelper.h"     // DebugHelperをインクルード
 
@@ -45,15 +46,24 @@ void AWarriorHeroCharacter::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
 
-	// 能力システムと属性セットが有効であることを確認
-	if (WarriorAbilitySystemComponent && WarriorAttributeSet)
+	// スタートアップデータが設定されている場合のみ処理を実行
+	if (!CharacterStartUpData.IsNull())
 	{
-		// 能力システムの所有者とアバターの名前を整形してデバッグ用文字列に格納
+		// スタートアップデータを同期的にロード
+		if (UDataAsset_StartUpDataBase* LoadedData = CharacterStartUpData.LoadSynchronous())
+		{
+			// ロードしたデータからアビリティを能力システムに付与
+			LoadedData->GiveToAbilitySystemComponent(WarriorAbilitySystemComponent);
+		}
+	}
+
+	// 能力システムと属性セットが有効であることを確認 (デバックメッセージ)
+	/*if (WarriorAbilitySystemComponent && WarriorAttributeSet)
+	{
 		const FString ASCText = FString::Printf(TEXT("Owner Actor: %s, AvatarActor: %s"), *WarriorAbilitySystemComponent->GetOwnerActor()->GetActorLabel(), *WarriorAbilitySystemComponent->GetAvatarActor()->GetActorLabel());
-		// 能力システムと属性セットが有効であることをデバッグ出力（所有者とアバターの情報付き）
 		Debug::Print(TEXT("Ability system component valid.") + ASCText, FColor::Green);
 		Debug::Print(TEXT("AttributeSet valid.") + ASCText, FColor::Green);
-	}
+	}*/
 }
 
 void AWarriorHeroCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)        // AWarriorHeroCharacter クラスのメンバー関数 SetupPlayerInputComponent プレイヤーの入力をキャラクターにバインドする為 UInputComponent*PlayerInputCompoent 入力をバインドする対象のコンポーネント

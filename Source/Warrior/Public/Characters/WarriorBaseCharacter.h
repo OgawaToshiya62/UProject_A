@@ -9,6 +9,7 @@
 
 class UWarriorAbilitySystemComponent;
 class UWarriorAttributeSet;
+class UDataAsset_StartUpDataBase;
 
 UCLASS()
 class WARRIOR_API AWarriorBaseCharacter : public ACharacter, public IAbilitySystemInterface
@@ -20,7 +21,7 @@ public:
 	AWarriorBaseCharacter();
 
 	//~ Begin IAbilitySystemInterface Interface.
-	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const;     // Gameplay Ability System に対応するためのインターフェース関数
+	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;     // Gameplay Ability System に対応するためのインターフェース関数
 	//~ End IAbilitySystemInterface Interface
 
 protected:
@@ -35,6 +36,10 @@ protected:
 	// キャラクターの属性（体力・攻撃力など）を保持するセット
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AbilitySystem")
 	UWarriorAttributeSet* WarriorAttributeSet;
+
+	// キャラクターの初期データを参照するためのプロパティ（エディタで設定可能、Blueprintから参照のみ）
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "CharacterData")
+	TSoftObjectPtr<UDataAsset_StartUpDataBase> CharacterStartUpData;
 
 public:
 	// キャラクターの能力システムコンポーネントへのアクセス関数

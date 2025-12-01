@@ -18,7 +18,7 @@ class WARRIOR_API UWarriorHeroAnimInstance : public UWarriorCharacterAnimInstanc
 	
 public:
 	virtual void NativeInitializeAnimation() override;                    // アニメーション初期化時に呼ばれる関数（キャラクター参照などを取得）
-	virtual void NativeThreadSafeUpdateAnimation(float DeltaSeconds);     // 毎フレーム呼ばれるスレッドセーフなアニメーション更新関数
+	virtual void NativeThreadSafeUpdateAnimation(float DeltaSeconds) override;     // 毎フレーム呼ばれるスレッドセーフなアニメーション更新関数
 
 protected:
 	// アニメーションの持ち主キャラクター（Blueprintから読み取り可能）

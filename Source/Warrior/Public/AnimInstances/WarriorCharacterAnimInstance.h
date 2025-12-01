@@ -19,7 +19,7 @@ class WARRIOR_API UWarriorCharacterAnimInstance : public UWarriorBaseAnimInstanc
 	
 public:
 	virtual void NativeInitializeAnimation() override;                    // アニメーションインスタンスが初めて使われるときに呼ばれる関数　キャラクター参照、取得をしたり初期状態に設定する
-	virtual void NativeThreadSafeUpdateAnimation(float DeltaSeconds);     // 毎フレーム呼ばれる更新関数　通常のNativeUpdateAnimationと違いスレッドセーフ(並列処理に安全)な更新処理を行うための関数　複雑なロジックや状態更新をここに書くことでアニメーションの滑らかさや安全性を保つことができる
+	virtual void NativeThreadSafeUpdateAnimation(float DeltaSeconds) override;     // 毎フレーム呼ばれる更新関数　通常のNativeUpdateAnimationと違いスレッドセーフ(並列処理に安全)な更新処理を行うための関数　複雑なロジックや状態更新をここに書くことでアニメーションの滑らかさや安全性を保つことができる
 
 protected:
 	UPROPERTY()                                 // キャラクター参照（前方宣言＋空のUPROPERTYで依存を最小化）
