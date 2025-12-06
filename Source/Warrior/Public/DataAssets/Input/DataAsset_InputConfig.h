@@ -21,6 +21,12 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	UInputAction* InputAction;     // UInputAction EnhancedInputSystemの入力アクション 実際の入力イベント(キーやスティック操作など)を定義したアセットが入る
+
+	// 入力タグと入力アクションが両方有効なら true を返す（設定が正しいかの判定）
+	bool IsValid() const
+	{
+		return InputTag.IsValid() && InputAction;
+	}
 };
 /**
  * 
@@ -38,4 +44,8 @@ public:
 	TArray<FWarriorInputActionConfig> NataiveInputActions;                                  // TArray　で複数の入力アクションを一覧で管理可能 FWarriorInputActionConfig 入力アクションとタグを紐づけた構造体(前に定義した InputTag + InputAction)
 
 	UInputAction* FindNativeInputActionByTag(const FGameplayTag& InInputTag) const;         // 指定されたタグに対応するUInputActionを検索して返す
+
+	// アビリティ用の入力アクション一覧（タグとアクションの組み合わせを管理）
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (TitleProperty = "InputTag"))
+	TArray<FWarriorInputActionConfig> AbilityInputActions;
 };
