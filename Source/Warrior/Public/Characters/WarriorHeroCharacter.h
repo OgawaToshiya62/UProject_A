@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Characters/WarriorBaseCharacter.h"
+#include "GameplayTagContainer.h"
 #include "WarriorHeroCharacter.generated.h"
 
 class USpringArmComponent;
@@ -56,6 +57,11 @@ private:
 
 	void Input_Move(const FInputActionValue& InputActionValue);                                                          // プレイヤーの移動(Move)入力を処理する関数の宣言
 	void Input_Look(const FInputActionValue& InputActionValue);                                                          // プレイヤーの視点(Look)入力を処理する関数の宣言
+
+	// プレイヤーがキーを押したときに呼ばれる関数の宣言 入力タグに対応するアビリティの開始を通知する
+	void Input_AbilityInputPressed(FGameplayTag InInputTag);
+	// プレイヤーがキーを離したときに呼ばれる関数の宣言 入力タグに対応するアビリティの終了を通知する
+	void Input_AbilityInputReleased(FGameplayTag InInputTag);
 
 #pragma endregion
 

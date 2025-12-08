@@ -85,6 +85,10 @@ void AWarriorHeroCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 
 	WarriorInputComponent->BindNativeInputAction(InputConfigUDataAsset, WarriorGameplayTags::InputTag_Move, ETriggerEvent::Triggered, this, &ThisClass::Input_Move);     // InputConfigUDataAsset 入力設定アセット InputTag 意味を持った入力識別子 ETriggerEvent 入力が発生した瞬間に反応する this このキャラクター自身 &ThisClass:: 呼び出す関数ポインタ
 	WarriorInputComponent->BindNativeInputAction(InputConfigUDataAsset, WarriorGameplayTags::InputTag_Look, ETriggerEvent::Triggered, this, &ThisClass::Input_Look);     // 上と同じ感じ
+
+	//入力設定データアセットに基づいてアビリティ入力をバインドする
+	WarriorInputComponent->BindAbilityInputAction(InputConfigUDataAsset, this, &ThisClass::Input_AbilityInputPressed, &ThisClass::Input_AbilityInputReleased);
+
 }
 
 void AWarriorHeroCharacter::BeginPlay()
@@ -126,4 +130,16 @@ void AWarriorHeroCharacter::Input_Look(const FInputActionValue& InputActionValue
 	{
 		AddControllerPitchInput(LookAxisVector.Y);                                                  // 上下方向(Pitch方向)の入力に回転させる処理
 	}
+}
+
+// プレイヤーがキーを押したことを AbilitySystemComponent に通知する
+void AWarriorHeroCharacter::Input_AbilityInputPressed(FGameplayTag InInputTag)
+{
+	WarriorAbilitySystemComponent->OnAbilityInputPressed(InInputTag);
+}
+
+// プレイヤーがキーを離したことを AbilitySystemComponent に通知する
+void AWarriorHeroCharacter::Input_AbilityInputReleased(FGameplayTag InInputTag)
+{
+	WarriorAbilitySystemComponent->OnAbilityInputReleased(InInputTag);
 }

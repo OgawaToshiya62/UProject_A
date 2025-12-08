@@ -14,4 +14,9 @@ class WARRIOR_API UWarriorAbilitySystemComponent : public UAbilitySystemComponen
 {
 	GENERATED_BODY()
 	
+public:
+	// 指定された入力タグに対応するアビリティの押下イベントを処理する
+	void OnAbilityInputPressed(const FGameplayTag& InInputTag);
+	// 指定された入力タグに対応するアビリティの解放イベントを処理する
+	void OnAbilityInputReleased(const FGameplayTag& InInputTag);
 };
