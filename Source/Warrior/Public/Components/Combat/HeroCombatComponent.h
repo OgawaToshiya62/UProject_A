@@ -6,6 +6,8 @@
 #include "Components/Combat/PawnCombatComponent.h"
 #include "HeroCombatComponent.generated.h"
 
+class AWarriorHeroWeapon;
+
 /**
  * 
  */
@@ -14,4 +16,8 @@ class WARRIOR_API UHeroCombatComponent : public UPawnCombatComponent
 {
 	GENERATED_BODY()
 	
+public:
+	// 指定された武器タグに対応するヒーローの所持武器を取得する関数
+	UFUNCTION(BlueprintCallable, Category = "Warrior|Combat")
+	AWarriorHeroWeapon* GetHeroCarriedWeaponByTag(FGameplayTag InWeaponTag) const;
 };
