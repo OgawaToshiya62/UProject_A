@@ -4,26 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "DataAssets/StartUpData/DataAsset_StartUpDataBase.h"
-#include "GameplayTagContainer.h"
+#include "WarriorTypes/WarriorStructTypes.h"
 #include "DataAsset_HeroStartUpData.generated.h"
 
-USTRUCT(BlueprintType)
-// ヒーローが持つアビリティセット（入力タグと付与するアビリティの組み合わせ）
-struct FWarriorHeroAbilitySet
-{
-	GENERATED_BODY()
-
-	// このアビリティを呼び出すための入力タグ
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (Categories = "InputTag"))
-	FGameplayTag InputTag;
-
-	// 付与するアビリティのクラス
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TSubclassOf<UWarriorGameplayAbility> AbilityToGrant;
-
-	// 入力タグとアビリティが有効かどうかを判定する
-	bool IsValid() const;
-};
 /**
  * 
  */
