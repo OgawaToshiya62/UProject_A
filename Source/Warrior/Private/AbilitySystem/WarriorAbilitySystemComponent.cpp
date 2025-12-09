@@ -52,3 +52,26 @@ void UWarriorAbilitySystemComponent::GrantHeroWeaponAbilities(const TArray<FWarr
 		OutGrantedAbilitySpecHandles.AddUnique(GiveAbility(AbilitySpec));
 	}
 }
+
+// 指定されたアビリティハンドルを AbilitySystem から削除する処理
+void UWarriorAbilitySystemComponent::RemovedGrantHeroWeaponAbilities(UPARAM(ref)TArray<FGameplayAbilitySpecHandle>& InSpecHandlesToRemove)
+{
+	// 削除対象が空なら何もせず終了
+	if (InSpecHandlesToRemove.IsEmpty())
+	{
+		return;
+	}
+
+	// 各アビリティハンドルを走査
+	for (const FGameplayAbilitySpecHandle& SpecHandle : InSpecHandlesToRemove)
+	{
+		// 有効なハンドルのみ削除
+		if (SpecHandle.IsValid())
+		{
+			ClearAbility(SpecHandle);     // AbilitySystem からアビリティを削除
+		}
+	}
+
+	// 削除対象リストを空にする（管理上の後処理）
+	InSpecHandlesToRemove.Empty();
+}

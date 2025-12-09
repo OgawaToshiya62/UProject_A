@@ -24,4 +24,8 @@ public:
 	// 指定された武器アビリティセットをヒーローに付与する関数
 	UFUNCTION(BlueprintCallable, Category = "Warrior|Ability", meta = (ApplyLevel = "1"))
 	void GrantHeroWeaponAbilities(const TArray<FWarriorHeroAbilitySet>& InDefaultWeaponAbilities, int32 ApplyLevel, TArray<FGameplayAbilitySpecHandle>& OutGrantedAbilitySpecHandles);
+
+	// 指定されたアビリティハンドルに対応する武器アビリティを削除する関数
+	UFUNCTION(BlueprintCallable, Category = "Warrior|Ability")
+	void RemovedGrantHeroWeaponAbilities(UPARAM(ref) TArray<FGameplayAbilitySpecHandle>& InSpecHandlesToRemove);
 };
