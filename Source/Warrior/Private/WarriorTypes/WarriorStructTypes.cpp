@@ -2,7 +2,7 @@
 
 
 #include "WarriorTypes/WarriorStructTypes.h"
-#include "AbilitySystem/Abilities/WarriorGameplayAbility.h"
+#include "AbilitySystem/Abilities/WarriorHeroGameplayAbility.h"
 
 // アビリティセットが有効かどうかを判定する
 bool FWarriorHeroAbilitySet::IsValid() const

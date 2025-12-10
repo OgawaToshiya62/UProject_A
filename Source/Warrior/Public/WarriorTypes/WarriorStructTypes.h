@@ -6,7 +6,7 @@
 #include "WarriorStructTypes.generated.h"
 
 class UWarriorHeroLinkedAnimLayer;
-class UWarriorGameplayAbility;
+class UWarriorHeroGameplayAbility;
 class UInputMappingContext;
 
 USTRUCT(BlueprintType)
@@ -21,7 +21,7 @@ struct FWarriorHeroAbilitySet
 
 	// 付与するアビリティのクラス
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TSubclassOf<UWarriorGameplayAbility> AbilityToGrant;
+	TSubclassOf<UWarriorHeroGameplayAbility> AbilityToGrant;
 
 	// 入力タグとアビリティが有効かどうかを判定する
 	bool IsValid() const;
