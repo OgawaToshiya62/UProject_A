@@ -28,6 +28,12 @@ UAbilitySystemComponent* AWarriorBaseCharacter::GetAbilitySystemComponent() cons
 	return GetWarriorAbilitySystemComponent();
 }
 
+// ベースキャラクターは戦闘コンポーネントを持たないため nullptr を返す
+UPawnCombatComponent* AWarriorBaseCharacter::GetPawnCombatComponent() const
+{
+	return nullptr;
+}
+
 // キャラクターが Controller に所有されたとき、能力システムに自身の情報を初期化
 void AWarriorBaseCharacter::PossessedBy(AController* NewController)
 {

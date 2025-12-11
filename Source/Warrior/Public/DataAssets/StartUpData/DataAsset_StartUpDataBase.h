@@ -8,6 +8,7 @@
 
 class UWarriorGameplayAbility;
 class UWarriorAbilitySystemComponent;
+class UGameplayEffect;
 
 /**
  * 
@@ -29,6 +30,10 @@ protected:
 	// 条件やイベントに反応して発動するアビリティのリスト
 	UPROPERTY(EditDefaultsOnly, Category = "StartUpData")
 	TArray< TSubclassOf < UWarriorGameplayAbility > > ReactiveAbilities;
+
+	// キャラクターがゲーム開始時に付与される GameplayEffect のリスト
+	UPROPERTY(EditDefaultsOnly, Category = "StartUpData")
+	TArray< TSubclassOf < UGameplayEffect > > StartUpGameplayEffects;
 
 	// 指定されたアビリティ群を AbilitySystemComponent に付与する処理
 	void GrantAbilities(const TArray< TSubclassOf < UWarriorGameplayAbility > >& InAbilitiesToGive, UWarriorAbilitySystemComponent* InASCToGive, int32 ApplyLevel = 1);

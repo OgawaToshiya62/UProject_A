@@ -20,10 +20,22 @@ public:
 	// コンストラクタ
 	AWarriorEnemyCharacter();
 
+	//~ Begin IPawnCombatInterface Interface.
+	virtual UPawnCombatComponent* GetPawnCombatComponent() const override;     // この関数をオーバーライドすることで、Pawn が持つ戦闘コンポーネントを返せるようになる
+	//~ End IPawnCombatInterface Interface
+
 protected:
+	//~ Begin APawn Interface.
+	virtual void PossessedBy(AController* NewController) override;     // キャラクターが Controller に所有されたときに呼ばれる処理（能力システムの初期化などに使用）
+	//~ End APawn Interface
+	
 	// 敵キャラクターの戦闘処理をするコンポーネント
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Combat")
 	UEnemyCombatComponent* EnemyCombatComponent;
+
+private:
+	// 敵キャラクターの初期データをセットアップする内部関数
+	void InitEnemyStartUpData();
 
 public:
 	// 敵キャラクターの戦闘コンポーネントを取得する関数

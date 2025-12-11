@@ -4,6 +4,10 @@
 #include "Characters/WarriorEnemyCharacter.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/Combat/EnemyCombatComponent.h"
+#include "Engine/AssetManager.h"
+#include "DataAssets/StartUpData/DataAsset_EnemyStartUpData.h"
+
+#include "WarriorDebugHelper.h"
 
 // 敵キャラクターのコンストラクタ
 AWarriorEnemyCharacter::AWarriorEnemyCharacter()
@@ -25,4 +29,43 @@ AWarriorEnemyCharacter::AWarriorEnemyCharacter()
 
 	// 敵キャラクター専用の戦闘コンポーネントを生成
 	EnemyCombatComponent = CreateDefaultSubobject<UEnemyCombatComponent>("EnemyCombatComponent");
+}
+
+// 敵キャラクターの戦闘コンポーネントを返す
+UPawnCombatComponent* AWarriorEnemyCharacter::GetPawnCombatComponent() const
+{
+	return EnemyCombatComponent;
+}
+
+// 敵キャラクターがコントローラに操作され始めたときに呼ばれる
+void AWarriorEnemyCharacter::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+
+	// 初期データをセットアップ
+	InitEnemyStartUpData();
+}
+
+// 敵キャラクターの初期データを非同期ロードして AbilitySystem に付与する
+void AWarriorEnemyCharacter::InitEnemyStartUpData()
+{
+	if (CharacterStartUpData.IsNull())
+	{
+		return;
+	}
+
+	UAssetManager::GetStreamableManager().RequestAsyncLoad(
+		CharacterStartUpData.ToSoftObjectPath(),
+		FStreamableDelegate::CreateLambda(
+			[this]()
+			{
+				if (UDataAsset_StartUpDataBase* LoadedData = CharacterStartUpData.Get())
+				{
+					LoadedData->GiveToAbilitySystemComponent(WarriorAbilitySystemComponent);
+
+					Debug::Print(TEXT("Enemy Start Up Data Loaded"), FColor::Green);
+				}
+			}
+		)
+	);
 }

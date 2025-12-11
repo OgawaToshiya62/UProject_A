@@ -4,17 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
+#include "WarriorTypes/WarriorEnumTypes.h"
 #include "WarriorFunctionLibrary.generated.h"
 
 class UWarriorAbilitySystemComponent;
-
-// タグ確認用の列挙型（Yes/No）
-UENUM()
-enum class EWarriorConfirmType : uint8
-{
-	Yes,
-	No
-};
+class UPawnCombatComponent;
 
 /**
  * 
@@ -42,4 +36,11 @@ public:
 	// アクターが指定タグを持っているかを Yes/No で返す（Blueprint用）
 	UFUNCTION(BlueprintCallable, Category = "Warrior|FunctionLibrary", meta = (DisplayName = "Does Actor Have Tag", ExpandEnumAsExecs = "OutConfirmType"))
 	static void BP_DoesActorHaveTag(AActor* InActor, FGameplayTag TagToCheck, EWarriorConfirmType& OutConfirmType);
+
+	// Actorから戦闘コンポーネントを取得する
+	static UPawnCombatComponent* NativeGetPawnCombatComponentFromActor(AActor* InActor);
+
+	// Actorから戦闘コンポーネントを取得し結果をEnumで返す
+	UFUNCTION(BlueprintCallable, Category = "Warrior|FunctionLibrary", meta = (DisplayName = "Get Pawn Combat Component From Actor", ExpandEnumAsExecs = "OutValidType"))
+	static UPawnCombatComponent* BP_GetPawnCombatComponentFromActor(AActor* InActor, EWarriorValidType& OutValidType);
 };

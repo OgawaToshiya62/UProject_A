@@ -44,6 +44,12 @@ AWarriorHeroCharacter::AWarriorHeroCharacter()
 	HeroCombatComponent = CreateDefaultSubobject<UHeroCombatComponent>(TEXT("HeroCombatComponent"));     // キャラクターに戦闘コンポーネントを生成し、"HeroCombatComponent" という名前で登録
 }
 
+// ヒーローキャラクターの戦闘コンポーネントを返す
+UPawnCombatComponent* AWarriorHeroCharacter::GetPawnCombatComponent() const
+{
+	return HeroCombatComponent;
+}
+
 // キャラクターが Controller に所有されたときに呼ばれる処理（能力システムの初期化や確認に使用）
 void AWarriorHeroCharacter::PossessedBy(AController* NewController)
 {
@@ -59,14 +65,6 @@ void AWarriorHeroCharacter::PossessedBy(AController* NewController)
 			LoadedData->GiveToAbilitySystemComponent(WarriorAbilitySystemComponent);
 		}
 	}
-
-	// 能力システムと属性セットが有効であることを確認 (デバックメッセージ)
-	/*if (WarriorAbilitySystemComponent && WarriorAttributeSet)
-	{
-		const FString ASCText = FString::Printf(TEXT("Owner Actor: %s, AvatarActor: %s"), *WarriorAbilitySystemComponent->GetOwnerActor()->GetActorLabel(), *WarriorAbilitySystemComponent->GetAvatarActor()->GetActorLabel());
-		Debug::Print(TEXT("Ability system component valid.") + ASCText, FColor::Green);
-		Debug::Print(TEXT("AttributeSet valid.") + ASCText, FColor::Green);
-	}*/
 }
 
 void AWarriorHeroCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)        // AWarriorHeroCharacter クラスのメンバー関数 SetupPlayerInputComponent プレイヤーの入力をキャラクターにバインドする為 UInputComponent*PlayerInputCompoent 入力をバインドする対象のコンポーネント

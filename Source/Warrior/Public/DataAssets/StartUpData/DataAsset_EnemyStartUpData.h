@@ -21,6 +21,7 @@ public:
 	virtual void GiveToAbilitySystemComponent(UWarriorAbilitySystemComponent* InASCToGive, int32 ApplyLevel = 1) override;
 
 private:
+	// 敵キャラクターが持つ戦闘アビリティクラスのリスト
 	UPROPERTY(EditDefaultsOnly, Category = "StartUpData")
 	TArray< TSubclassOf < UWarriorEnemyGameplayAbility > > EnemyCombatAbilities;
 };

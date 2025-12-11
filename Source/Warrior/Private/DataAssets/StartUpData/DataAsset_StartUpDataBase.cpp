@@ -12,6 +12,25 @@ void UDataAsset_StartUpDataBase::GiveToAbilitySystemComponent(UWarriorAbilitySys
 
 	GrantAbilities(ActivateOnGivenAbilities, InASCToGive, ApplyLevel); 
 	GrantAbilities(ReactiveAbilities, InASCToGive, ApplyLevel);
+
+	// キャラクターの初期ステータスを AbilitySystem に付与する処理 StartUpGameplayEffects に登録された GameplayEffect を順番に適用
+	if (!StartUpGameplayEffects.IsEmpty())
+	{
+		for (const TSubclassOf < UGameplayEffect >& EffectClass : StartUpGameplayEffects)
+		{
+			if (!EffectClass) continue;
+
+			// デフォルトオブジェクトを取得
+			UGameplayEffect* EffectCDO = EffectClass -> GetDefaultObject< UGameplayEffect >();
+
+			// 自分自身に効果を適用
+			InASCToGive->ApplyGameplayEffectToSelf(
+				EffectCDO,
+				ApplyLevel,
+				InASCToGive->MakeEffectContext()
+			);
+		}
+	}
 }
 
 // 指定されたアビリティ群を AbilitySystemComponent に付与する内部処理

@@ -4,6 +4,7 @@
 #include "WarriorFunctionLibrary.h"
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystem/WarriorAbilitySystemComponent.h"
+#include "Interface/PawnCombatInterface.h"
 
 // 指定アクターから WarriorAbilitySystemComponent を取得する（必ず存在する前提）
 UWarriorAbilitySystemComponent* UWarriorFunctionLibrary::NativeGetWarriorASCFromActor(AActor* InActor)
@@ -47,4 +48,27 @@ bool UWarriorFunctionLibrary::NativeDoesActorHaveTag(AActor* InActor, FGameplayT
 void UWarriorFunctionLibrary::BP_DoesActorHaveTag(AActor* InActor, FGameplayTag TagToCheck, EWarriorConfirmType& OutConfirmType)
 {
 	OutConfirmType = NativeDoesActorHaveTag(InActor, TagToCheck) ? EWarriorConfirmType::Yes : EWarriorConfirmType::No;
+}
+
+// Actorから戦闘コンポーネントを取得する
+UPawnCombatComponent* UWarriorFunctionLibrary::NativeGetPawnCombatComponentFromActor(AActor* InActor)
+{
+	check(InActor);
+
+	if (IPawnCombatInterface* PawnCombatInterface = Cast< IPawnCombatInterface >(InActor))
+	{
+		return PawnCombatInterface -> GetPawnCombatComponent();
+	}
+
+	return nullptr;
+}
+
+// Actorから戦闘コンポーネントを取得し結果をEnumで返す
+UPawnCombatComponent* UWarriorFunctionLibrary::BP_GetPawnCombatComponentFromActor(AActor* InActor, EWarriorValidType& OutValidType)
+{
+	UPawnCombatComponent* CombatComponent = NativeGetPawnCombatComponentFromActor(InActor);
+
+	OutValidType = CombatComponent? EWarriorValidType::Valid : EWarriorValidType::Invalid;
+
+	return CombatComponent;
 }
