@@ -9,6 +9,15 @@
 
 class AWarriorWeaponBase;
 
+// 武器の当たり判定を切り替える対象を指定する列挙体
+UENUM(BlueprintType)
+enum class EToggleDamegeType : uint8
+{
+	CurrentEquippedWeapon,     // 現在装備している武器
+	LeftHand,                  // 左手の武器
+	RightHand                  // 右手の武器
+};
+
 /**
  * 
  */
@@ -34,6 +43,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Warrior|Combat")
 	AWarriorWeaponBase* GetCharacterCurrentEquippedWeapon() const;
 	
+	// 武器の当たり判定をオン／オフする関数
+	UFUNCTION(BlueprintCallable, Category = "Warrior|Combat")
+	void ToggleWeaponCollision(bool bShouldEnable, EToggleDamegeType ToggleDamageType = EToggleDamegeType::CurrentEquippedWeapon);
+
 private:
 	// キャラクターが所持している武器をタグで管理するマップ
 	TMap< FGameplayTag, AWarriorWeaponBase* > CharacterCarriedWeaponMap;

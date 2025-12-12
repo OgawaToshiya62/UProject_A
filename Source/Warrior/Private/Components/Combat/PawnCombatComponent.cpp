@@ -3,6 +3,7 @@
 
 #include "Components/Combat/PawnCombatComponent.h"
 #include "Items/Weapons/WarriorWeaponBase.h"
+#include "Components/BoxComponent.h"
 
 #include "WarriorDebugHelper.h"
 
@@ -43,4 +44,26 @@ AWarriorWeaponBase* UPawnCombatComponent::GetCharacterCurrentEquippedWeapon() co
 	}
 	
 	return GetCharacterCarriedWeaponByTag(CurrentEquippedWeaponTag);
+}
+
+// 武器のコリジョン（当たり判定）をオン／オフする関数
+void UPawnCombatComponent::ToggleWeaponCollision(bool bShouldEnable, EToggleDamegeType ToggleDamageType)
+{
+	if (ToggleDamageType == EToggleDamegeType::CurrentEquippedWeapon)
+	{
+		AWarriorWeaponBase* WeaponToToggle = GetCharacterCurrentEquippedWeapon();
+
+		check(WeaponToToggle);
+
+		if (bShouldEnable)
+		{
+			WeaponToToggle->GetWeaponCollisionBox()->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+			Debug::Print(WeaponToToggle->GetName() + TEXT(" collision enabled "), FColor::Green);
+		}
+		else
+		{
+			WeaponToToggle->GetWeaponCollisionBox()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+			Debug::Print(WeaponToToggle->GetName() + TEXT(" collision disabled "), FColor::Red);
+		}
+	}
 }
