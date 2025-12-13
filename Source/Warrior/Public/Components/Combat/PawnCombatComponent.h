@@ -47,6 +47,15 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Warrior|Combat")
 	void ToggleWeaponCollision(bool bShouldEnable, EToggleDamegeType ToggleDamageType = EToggleDamegeType::CurrentEquippedWeapon);
 
+	// 武器がアクターにヒットしたときの処理を定義する仮想関数
+	virtual void OnHitTargetActor(AActor* HitActor);
+	// 武器がアクターから離れたときの処理を定義する仮想関数
+	virtual void OnWeaponPulledFromTargetActor(AActor* InteractedActor);
+
+protected:
+	// 現在コリジョンで重なっているアクターを保持する配列
+	TArray<AActor*> OverlappedActors;
+
 private:
 	// キャラクターが所持している武器をタグで管理するマップ
 	TMap< FGameplayTag, AWarriorWeaponBase* > CharacterCarriedWeaponMap;
