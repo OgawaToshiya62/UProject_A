@@ -32,7 +32,7 @@ public:
 
 	// ダメージ効果のスペックを生成する関数
 	UFUNCTION(BlueprintPure, Category = "Warrior|Ability")
-	FGameplayEffectSpecHandle MakeHeroDamageEffectSpecHandle(TSubclassOf<UGameplayEffect> EffectClass, float InWeaponBaseDamage, FGameplayTag InCurrentAttackTypeTag, int32 InCurrentComboCount);
+	FGameplayEffectSpecHandle MakeHeroDamageEffectSpecHandle(TSubclassOf<UGameplayEffect> EffectClass, float InWeaponBaseDamage, FGameplayTag InCurrentAttackTypeTag, int32 InUsedComboCount);
 
 private:
 	// キャッシュ用の弱参照ポインタ（オブジェクト破棄に強い）

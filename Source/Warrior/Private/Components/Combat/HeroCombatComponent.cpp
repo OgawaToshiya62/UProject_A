@@ -14,6 +14,18 @@ AWarriorHeroWeapon* UHeroCombatComponent::GetHeroCarriedWeaponByTag(FGameplayTag
     return Cast<AWarriorHeroWeapon>(GetCharacterCarriedWeaponByTag(InWeaponTag));
 }
 
+// 現在装備している武器を取得（ヒーロー専用武器型にキャスト）
+AWarriorHeroWeapon* UHeroCombatComponent::GetHeroCurrentEquippedWeapon() const
+{
+    return Cast<AWarriorHeroWeapon>(GetCharacterCurrentEquippedWeapon());
+}
+
+// 現在装備している武器の指定レベルでのダメージ値を取得
+float UHeroCombatComponent::GetHeroCurrentEquippWeaponDamageAtLevel(float InLevel) const
+{
+    return GetHeroCurrentEquippedWeapon() -> HeroWeaponData.WeaponBaseDamage.GetValueAtLevel(InLevel);
+}
+
 // ヒーローの武器がターゲットにヒットしたときの処理
 void UHeroCombatComponent::OnHitTargetActor(AActor* HitActor)
 {

@@ -3,6 +3,7 @@
 #pragma once
 
 #include "GameplayTagContainer.h"
+#include "ScalableFloat.h"
 #include "WarriorStructTypes.generated.h"
 
 class UWarriorHeroLinkedAnimLayer;
@@ -44,4 +45,8 @@ struct FWarriorHeroWeaponData
 	// 武器に紐づくデフォルトアビリティの一覧
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (TitleProperty = "InputTag"))
 	TArray<FWarriorHeroAbilitySet> DefaultWeaponAbilities;
+
+	// 武器の基本ダメージを表すプロパティ
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	FScalableFloat WeaponBaseDamage;
 };

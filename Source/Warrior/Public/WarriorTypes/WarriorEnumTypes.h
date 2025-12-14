@@ -15,3 +15,11 @@ enum class EWarriorValidType : uint8
 	Valid,
 	Invalid
 };
+
+// GameplayEffect ‚Ì“K—pˆ—‚È‚Ç‚Å¬Œ÷^¸”s‚ğ•\‚·—ñ‹“Œ^
+UENUM()
+enum class EWarriorSuccessType : uint8
+{
+	Successful,
+	Failed
+};

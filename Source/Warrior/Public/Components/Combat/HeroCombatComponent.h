@@ -21,6 +21,14 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Warrior|Combat")
 	AWarriorHeroWeapon* GetHeroCarriedWeaponByTag(FGameplayTag InWeaponTag) const;
 
+	// 現在装備している武器を返す関数
+	UFUNCTION(BlueprintCallable, Category = "Warrior|Combat")
+	AWarriorHeroWeapon* GetHeroCurrentEquippedWeapon() const;
+
+	// 現在装備している武器の指定レベルでのダメージ値を返す関数
+	UFUNCTION(BlueprintCallable, Category = "Warrior|Combat")
+	float GetHeroCurrentEquippWeaponDamageAtLevel(float InLevel) const;
+
 	// 武器がアクターにヒットしたときの処理を定義する仮想関数
 	virtual void OnHitTargetActor(AActor* HitActor) override;
 	// 武器がアクターから離れたときの処理を定義する仮想関数
