@@ -14,4 +14,10 @@ class WARRIOR_API UGEExecCalc_DamageTaken : public UGameplayEffectExecutionCalcu
 {
 	GENERATED_BODY()
 	
+public:
+	// ExecCalc のコンストラクタでキャプチャ対象を登録するための関数
+	UGEExecCalc_DamageTaken();
+
+	// ダメージ計算を実行する関数
+	virtual void Execute_Implementation(const FGameplayEffectCustomExecutionParameters& ExecutionParams, FGameplayEffectCustomExecutionOutput& OutExecutionOutput) const override;
 };

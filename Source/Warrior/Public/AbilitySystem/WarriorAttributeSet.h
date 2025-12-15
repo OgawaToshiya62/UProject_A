@@ -47,11 +47,11 @@ public:
 	
 	// çUåÇóÕ
 	UPROPERTY(BlueprintReadOnly, Category = "Damage")
-	FGameplayAttributeData AttackPawer;
-	ATTRIBUTE_ACCESSORS(UWarriorAttributeSet, AttackPawer)
+	FGameplayAttributeData AttackPower;
+	ATTRIBUTE_ACCESSORS(UWarriorAttributeSet, AttackPower)
 
 	// ñhå‰óÕ
 	UPROPERTY(BlueprintReadOnly, Category = "Damage")
-	FGameplayAttributeData DefensePawer;
-	ATTRIBUTE_ACCESSORS(UWarriorAttributeSet, DefensePawer)
+	FGameplayAttributeData DefensePower;
+	ATTRIBUTE_ACCESSORS(UWarriorAttributeSet, DefensePower)
 };
