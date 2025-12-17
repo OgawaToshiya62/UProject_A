@@ -45,10 +45,20 @@ void UHeroCombatComponent::OnHitTargetActor(AActor* HitActor)
         WarriorGameplayTags::Shared_Event_MeleeHit,
         Data
     );
+
+    UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(
+        GetOwningPawn(),
+        WarriorGameplayTags::Player_Event_HitPause,
+        FGameplayEventData()
+    );
 }
 
 // ヒーローの武器がターゲットから離れたときの処理
 void UHeroCombatComponent::OnWeaponPulledFromTargetActor(AActor* InteractedActor)
 {
-
+    UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(
+        GetOwningPawn(),
+        WarriorGameplayTags::Player_Event_HitPause,
+        FGameplayEventData()
+    );
 }
