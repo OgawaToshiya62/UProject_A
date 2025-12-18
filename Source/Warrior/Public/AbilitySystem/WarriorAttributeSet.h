@@ -7,6 +7,8 @@
 #include "AbilitySystem/WarriorAbilitySystemComponent.h"
 #include "WarriorAttributeSet.generated.h"
 
+class IPawnUIInterface;
+
 // 属性アクセス用のマクロ指定したクラスと属性名に対して、Getter/Setter/初期化関数を自動生成する
 #define ATTRIBUTE_ACCESSORS(ClassName, PropertyName) \
 GAMEPLAYATTRIBUTE_PROPERTY_GETTER(ClassName, PropertyName) \
@@ -62,4 +64,8 @@ public:
 	UPROPERTY(BlueprintReadOnly, Category = "Damage")
 	FGameplayAttributeData DamageTaken;
 	ATTRIBUTE_ACCESSORS(UWarriorAttributeSet, DamageTaken)
+
+private:
+	// Pawn が実装する UI インターフェースを弱参照でキャッシュ
+	TWeakInterfacePtr<IPawnUIInterface> CachedPawnUIInterface;
 };

@@ -61,6 +61,12 @@ UPawnUIComponent* AWarriorHeroCharacter::GetPawnUIComponent() const
 	return HeroUIComponent;
 }
 
+// ヒーローキャラクターのUIコンポーネントを返す
+UHeroUIComponent* AWarriorHeroCharacter::GetHeroUIComponent() const
+{
+	return HeroUIComponent;
+}
+
 // キャラクターが Controller に所有されたときに呼ばれる処理（能力システムの初期化や確認に使用）
 void AWarriorHeroCharacter::PossessedBy(AController* NewController)
 {

@@ -14,4 +14,8 @@ class WARRIOR_API UHeroUIComponent : public UPawnUIComponent
 {
 	GENERATED_BODY()
 	
+public:
+	// 現在のRage割合が変化したときに通知するイベント
+	UPROPERTY(BlueprintAssignable)
+	FOnPercentChangedDelegate OnCurrentRageChanged;
 };

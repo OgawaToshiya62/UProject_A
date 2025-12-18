@@ -31,6 +31,7 @@ public:
 
 	//~ Begin IPawnUIInterface Interface.
 	virtual UPawnUIComponent* GetPawnUIComponent() const override;     // IPawnUIInterface の実装: この Pawn が持つ UI コンポーネントを返す
+	virtual UHeroUIComponent* GetHeroUIComponent() const override;     // IPawnUIInterface の実装: プレイヤー専用のUIコンポーネント(HeroUIComponent)を返す
 	//~ End IPawnUIInterface Interface
 
 protected:     // 親クラスと子クラスからアクセス可能にする
