@@ -6,6 +6,7 @@
 #include "Components/Combat/EnemyCombatComponent.h"
 #include "Engine/AssetManager.h"
 #include "DataAssets/StartUpData/DataAsset_EnemyStartUpData.h"
+#include "Components/UI/EnemyUIComponent.h"
 
 #include "WarriorDebugHelper.h"
 
@@ -29,12 +30,21 @@ AWarriorEnemyCharacter::AWarriorEnemyCharacter()
 
 	// 敵キャラクター専用の戦闘コンポーネントを生成
 	EnemyCombatComponent = CreateDefaultSubobject<UEnemyCombatComponent>("EnemyCombatComponent");
+
+	// 敵キャラクターのUI処理を担当するコンポーネントを生成・初期化
+	EnemyUIComponent = CreateDefaultSubobject<UEnemyUIComponent>("EnemyUIComponent");
 }
 
 // 敵キャラクターの戦闘コンポーネントを返す
 UPawnCombatComponent* AWarriorEnemyCharacter::GetPawnCombatComponent() const
 {
 	return EnemyCombatComponent;
+}
+
+// 敵キャラクターのUIコンポーネントを返す
+UPawnUIComponent* AWarriorEnemyCharacter::GetPawnUIComponent() const
+{
+	return EnemyUIComponent;
 }
 
 // 敵キャラクターがコントローラに操作され始めたときに呼ばれる

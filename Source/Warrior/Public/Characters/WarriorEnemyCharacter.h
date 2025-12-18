@@ -7,6 +7,7 @@
 #include "WarriorEnemyCharacter.generated.h"
 
 class UEnemyCombatComponent;
+class UEnemyUIComponent;
 
 /**
  * 
@@ -24,6 +25,10 @@ public:
 	virtual UPawnCombatComponent* GetPawnCombatComponent() const override;     // この関数をオーバーライドすることで、Pawn が持つ戦闘コンポーネントを返せるようになる
 	//~ End IPawnCombatInterface Interface
 
+	//~ Begin IPawnUIInterface Interface.
+	virtual UPawnUIComponent* GetPawnUIComponent() const override;     // IPawnUIInterface の実装: この Pawn が持つ UI コンポーネントを返す
+	//~ End IPawnUIInterface Interface
+
 protected:
 	//~ Begin APawn Interface.
 	virtual void PossessedBy(AController* NewController) override;     // キャラクターが Controller に所有されたときに呼ばれる処理（能力システムの初期化などに使用）
@@ -32,6 +37,10 @@ protected:
 	// 敵キャラクターの戦闘処理をするコンポーネント
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Combat")
 	UEnemyCombatComponent* EnemyCombatComponent;
+
+	// 敵キャラクターのUI処理を担当するコンポーネント
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "UI")
+	UEnemyUIComponent* EnemyUIComponent;
 
 private:
 	// 敵キャラクターの初期データをセットアップする内部関数

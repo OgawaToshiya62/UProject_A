@@ -13,6 +13,7 @@
 #include "AbilitySystem/WarriorAbilitySystemComponent.h"
 #include "DataAssets/StartUpData/DataAsset_HeroStartUpData.h"
 #include "Components/Combat/HeroCombatComponent.h"
+#include "Components/UI/HeroUIComponent.h"
 
 #include "WarriorDebugHelper.h"     // DebugHelperをインクルード
 
@@ -41,13 +42,23 @@ AWarriorHeroCharacter::AWarriorHeroCharacter()
 	GetCharacterMovement() -> MaxWalkSpeed = 400.f;                                   // キャラクターの最大歩行速度
 	GetCharacterMovement() -> BrakingDecelerationWalking = 2000.f;                    // キャラクターが止まるときの減速力
 
-	HeroCombatComponent = CreateDefaultSubobject<UHeroCombatComponent>(TEXT("HeroCombatComponent"));     // キャラクターに戦闘コンポーネントを生成し、"HeroCombatComponent" という名前で登録
+	// キャラクターに戦闘コンポーネントを生成し、"HeroCombatComponent" という名前で登録
+	HeroCombatComponent = CreateDefaultSubobject<UHeroCombatComponent>(TEXT("HeroCombatComponent"));
+	
+	// プレイヤーキャラクターのUI処理を担当するコンポーネントを生成・初期化
+	HeroUIComponent = CreateDefaultSubobject<UHeroUIComponent>(TEXT("HeroUIComponent"));
 }
 
 // ヒーローキャラクターの戦闘コンポーネントを返す
 UPawnCombatComponent* AWarriorHeroCharacter::GetPawnCombatComponent() const
 {
 	return HeroCombatComponent;
+}
+
+// ヒーローキャラクターのUIコンポーネントを返す
+UPawnUIComponent* AWarriorHeroCharacter::GetPawnUIComponent() const
+{
+	return HeroUIComponent;
 }
 
 // キャラクターが Controller に所有されたときに呼ばれる処理（能力システムの初期化や確認に使用）

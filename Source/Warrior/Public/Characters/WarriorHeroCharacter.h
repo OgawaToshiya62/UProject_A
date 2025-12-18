@@ -12,6 +12,7 @@ class UCameraComponent;
 class UDataAsset_InputConfig;
 struct FInputActionValue;
 class UHeroCombatComponent;
+class UHeroUIComponent;
 
 /**
  * 
@@ -27,6 +28,10 @@ public:
 	//~ Begin IPawnCombatInterface Interface.
 	virtual UPawnCombatComponent* GetPawnCombatComponent() const override;     // この関数をオーバーライドすることで、Pawn が持つ戦闘コンポーネントを返せるようになる
 	//~ End IPawnCombatInterface Interface
+
+	//~ Begin IPawnUIInterface Interface.
+	virtual UPawnUIComponent* GetPawnUIComponent() const override;     // IPawnUIInterface の実装: この Pawn が持つ UI コンポーネントを返す
+	//~ End IPawnUIInterface Interface
 
 protected:     // 親クラスと子クラスからアクセス可能にする
 	//~ Begin APawn Interface.
@@ -48,9 +53,13 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* FollowCamera;
 
-	// キャラクターの戦闘処理をするコンポーネント（BPから参照可能、編集不可）
+	// キャラクターの戦闘処理をするコンポーネント
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Combat", meta = (AllowPrivateAccess = "true"))
 	UHeroCombatComponent* HeroCombatComponent;
+
+	// キャラクターのUI処理を担当するコンポーネント
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "UI", meta = (AllowPrivateAccess = "true"))
+	UHeroUIComponent* HeroUIComponent;
 
 #pragma endregion
 

@@ -34,6 +34,12 @@ UPawnCombatComponent* AWarriorBaseCharacter::GetPawnCombatComponent() const
 	return nullptr;
 }
 
+// ベースキャラクターはUIコンポーネントを持たないため nullptr を返す
+UPawnUIComponent* AWarriorBaseCharacter::GetPawnUIComponent() const
+{
+	return nullptr;
+}
+
 // キャラクターが Controller に所有されたとき、能力システムに自身の情報を初期化
 void AWarriorBaseCharacter::PossessedBy(AController* NewController)
 {
