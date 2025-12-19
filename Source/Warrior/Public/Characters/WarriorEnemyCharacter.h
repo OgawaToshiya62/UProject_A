@@ -27,6 +27,7 @@ public:
 
 	//~ Begin IPawnUIInterface Interface.
 	virtual UPawnUIComponent* GetPawnUIComponent() const override;     // IPawnUIInterface の実装: この Pawn が持つ UI コンポーネントを返す
+	virtual UEnemyUIComponent* GetEnemyUIComponent() const override;
 	//~ End IPawnUIInterface Interface
 
 protected:

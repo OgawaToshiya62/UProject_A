@@ -18,3 +18,16 @@ void UWarriorWidgetBase::NativeOnInitialized()
 	}
 
 }
+
+// 敵アクターをUIインターフェースとして扱い、EnemyUIComponentを取得して Blueprint 側へ初期化通知を送る
+void UWarriorWidgetBase::InitEnemyCreatedWidget(AActor* OwningEnemyActor)
+{
+	if (IPawnUIInterface* PawnUIInterface = Cast<IPawnUIInterface>(OwningEnemyActor))
+	{
+		UEnemyUIComponent* EnemyUIComponent = PawnUIInterface -> GetEnemyUIComponent();
+
+		checkf(EnemyUIComponent, TEXT("Failed to extrac an EnemyUIComponent from %s"), *OwningEnemyActor -> GetActorNameOrLabel());
+
+		BP_OnOwningEnemyUIComponentInitialized(EnemyUIComponent);
+	}
+}

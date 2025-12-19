@@ -10,3 +10,9 @@ UHeroUIComponent* IPawnUIInterface::GetHeroUIComponent() const
 {
 	return nullptr;
 }
+
+// Enemy専用UIコンポーネントを持たないためnullptrを返す
+UEnemyUIComponent* IPawnUIInterface::GetEnemyUIComponent() const
+{
+	return nullptr;
+}

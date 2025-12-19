@@ -8,6 +8,7 @@
 
 class UPawnUIComponent;
 class UHeroUIComponent;
+class UEnemyUIComponent;
 
 // This class does not need to be modified.
 UINTERFACE(MinimalAPI)
@@ -30,4 +31,7 @@ public:
 
 	// Hero専用の UI コンポーネントを返す
 	virtual UHeroUIComponent* GetHeroUIComponent() const;
+
+	// 敵専用の UI コンポーネントを返す
+	virtual UEnemyUIComponent* GetEnemyUIComponent() const;
 };

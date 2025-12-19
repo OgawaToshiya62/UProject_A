@@ -47,6 +47,12 @@ UPawnUIComponent* AWarriorEnemyCharacter::GetPawnUIComponent() const
 	return EnemyUIComponent;
 }
 
+UEnemyUIComponent* AWarriorEnemyCharacter::GetEnemyUIComponent() const
+{
+	return EnemyUIComponent;
+}
+
+
 // 敵キャラクターがコントローラに操作され始めたときに呼ばれる
 void AWarriorEnemyCharacter::PossessedBy(AController* NewController)
 {
