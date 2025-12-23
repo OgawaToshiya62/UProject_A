@@ -8,6 +8,7 @@
 
 class UEnemyCombatComponent;
 class UEnemyUIComponent;
+class UWidgetComponent;
 
 /**
  * 
@@ -31,6 +32,8 @@ public:
 	//~ End IPawnUIInterface Interface
 
 protected:
+	virtual void BeginPlay() override;
+
 	//~ Begin APawn Interface.
 	virtual void PossessedBy(AController* NewController) override;     // キャラクターが Controller に所有されたときに呼ばれる処理（能力システムの初期化などに使用）
 	//~ End APawn Interface
@@ -42,6 +45,10 @@ protected:
 	// 敵キャラクターのUI処理を担当するコンポーネント
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "UI")
 	UEnemyUIComponent* EnemyUIComponent;
+
+	// 敵の頭上に表示する HPバー用の WidgetComponent
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "UI")
+	UWidgetComponent* EnemyHealthWidgetComponent;
 
 private:
 	// 敵キャラクターの初期データをセットアップする内部関数
