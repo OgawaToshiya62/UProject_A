@@ -21,6 +21,10 @@ public:
 	// 敵AIコントローラーのコンストラクタ
 	AWarriorAIController(const FObjectInitializer& ObjectInitializer);
 
+	//~ Begin IGenericTeamAgentInterface Interface.
+	virtual ETeamAttitude::Type GetTeamAttitudeTowards(const AActor& Other) const;     // IGenericTeamAgentInterface の実装 このAIが、指定されたアクターを敵・味方・中立のどれとして扱うかを返す
+	//~ End IGenericTeamAgentInterface Interface
+
 protected:
 	// AI の知覚を管理するコンポーネント
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
