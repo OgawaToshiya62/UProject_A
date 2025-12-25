@@ -6,6 +6,9 @@
 #include "AIController.h"
 #include "WarriorAIController.generated.h"
 
+class UAIPerceptionComponent;
+class UAISenseConfig_Sight;
+
 /**
  * 
  */
@@ -17,4 +20,17 @@ class WARRIOR_API AWarriorAIController : public AAIController
 public:
 	// 敵AIコントローラーのコンストラクタ
 	AWarriorAIController(const FObjectInitializer& ObjectInitializer);
+
+protected:
+	// AI の知覚を管理するコンポーネント
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UAIPerceptionComponent* EnemyPerceptionComponent;
+
+	// 視覚に関する設定
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UAISenseConfig_Sight* AISenseConfig_Sight;
+
+	// 視覚情報が更新されたときに呼ばれるイベント
+	UFUNCTION()
+	virtual void OnEnemyPerceptionUpdated(AActor* Actor, FAIStimulus Stimulus);
 };
