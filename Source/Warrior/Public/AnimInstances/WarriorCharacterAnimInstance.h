@@ -36,4 +36,8 @@ protected:
 	// キャラクターが加速中かどうか（移動入力があるか）を示すフラグ
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "AnimData|LocomotionData")
 	bool bHasAcceleration;
+
+	// キャラクターの移動方向（前後左右の角度）を保持する
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "AnimData|LocomotionData")
+	float LocomotionDirection;
 };
