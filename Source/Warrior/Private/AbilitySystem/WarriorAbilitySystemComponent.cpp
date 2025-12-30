@@ -2,7 +2,7 @@
 
 
 #include "AbilitySystem/WarriorAbilitySystemComponent.h"
-#include "AbilitySystem/Abilities/WarriorGameplayAbility.h"
+#include "AbilitySystem/Abilities/WarriorHeroGameplayAbility.h"
 
 // 入力タグに対応するアビリティを検索して発動する
 void UWarriorAbilitySystemComponent::OnAbilityInputPressed(const FGameplayTag& InInputTag)
@@ -74,4 +74,34 @@ void UWarriorAbilitySystemComponent::RemovedGrantHeroWeaponAbilities(UPARAM(ref)
 
 	// 削除対象リストを空にする（管理上の後処理）
 	InSpecHandlesToRemove.Empty();
+}
+
+// 指定したGameplayTagを持つアビリティを探し、起動できるなら起動する
+bool UWarriorAbilitySystemComponent::TryActivateAbilityByTag(FGameplayTag AbilityTagToActivate)
+{
+	// 渡されたタグが有効かチェック
+	check(AbilityTagToActivate.IsValid());
+
+	// このタグを持つアビリティを格納する配列
+	TArray<FGameplayAbilitySpec*> FoundAbilitySpecs;
+	GetActivatableGameplayAbilitySpecsByAllMatchingTags(AbilityTagToActivate.GetSingleTagContainer(), FoundAbilitySpecs);
+
+	// 一致するアビリティが見つかった場合
+	if (!FoundAbilitySpecs.IsEmpty())
+	{
+		// 複数ある場合はランダムで1つ選ぶ
+		const int32 RandomAbilityIndex = FMath::RandRange(0, FoundAbilitySpecs.Num() - 1);
+		FGameplayAbilitySpec* SpecToActivate = FoundAbilitySpecs[RandomAbilityIndex];
+
+		check(SpecToActivate);
+
+		// まだアビリティが発動中でないなら起動する
+		if (!SpecToActivate -> IsActive())
+		{
+			return TryActivateAbility(SpecToActivate -> Handle);
+		}
+	}
+
+	// 見つからない or 起動できない場合
+	return false;
 }

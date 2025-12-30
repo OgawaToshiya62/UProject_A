@@ -28,4 +28,8 @@ public:
 	// 指定されたアビリティハンドルに対応する武器アビリティを削除する関数
 	UFUNCTION(BlueprintCallable, Category = "Warrior|Ability")
 	void RemovedGrantHeroWeaponAbilities(UPARAM(ref) TArray<FGameplayAbilitySpecHandle>& InSpecHandlesToRemove);
+
+	// 指定したGameplayTagを持つアビリティを探し、起動できるなら起動する
+	UFUNCTION(BlueprintCallable, Category = "Warrior|Ability")
+	bool TryActivateAbilityByTag(FGameplayTag AbilityTagToActivate);
 };
