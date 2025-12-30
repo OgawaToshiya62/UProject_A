@@ -5,6 +5,7 @@
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystem/WarriorAbilitySystemComponent.h"
 #include "Interface/PawnCombatInterface.h"
+#include "GenericTeamAgentInterface.h"
 
 // 指定アクターから WarriorAbilitySystemComponent を取得する（必ず存在する前提）
 UWarriorAbilitySystemComponent* UWarriorFunctionLibrary::NativeGetWarriorASCFromActor(AActor* InActor)
@@ -71,4 +72,25 @@ UPawnCombatComponent* UWarriorFunctionLibrary::BP_GetPawnCombatComponentFromActo
 	OutValidType = CombatComponent? EWarriorValidType::Valid : EWarriorValidType::Invalid;
 
 	return CombatComponent;
+}
+
+// 敵対関係にあるかどうかを判定する
+bool UWarriorFunctionLibrary::IsTargetPawnHostile(APawn* QueryPawn, APawn* TargetPawn)
+{
+	// どちらかが null ならゲームとして成立しないためクラッシュさせて気づけるようにする
+	check(QueryPawn && TargetPawn);
+
+	// Pawn の Controller が IGenericTeamAgentInterface を実装しているかチェック
+	IGenericTeamAgentInterface* QueryTeamAgent = Cast<IGenericTeamAgentInterface>(QueryPawn -> GetController());
+	IGenericTeamAgentInterface* TargetTeamAgent = Cast<IGenericTeamAgentInterface>(TargetPawn -> GetController());
+
+	// 両方がチーム情報を持っている場合のみ比較する
+	if (QueryTeamAgent && TargetTeamAgent)
+	{
+		// チームIDが異なれば敵対関係とみなす
+		return QueryTeamAgent->GetGenericTeamId() != TargetTeamAgent -> GetGenericTeamId();
+	}
+
+	// どちらかがチーム情報を持っていない場合は敵対とみなさない
+	return false;
 }
