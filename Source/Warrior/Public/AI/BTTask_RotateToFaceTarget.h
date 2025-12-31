@@ -43,6 +43,11 @@ class WARRIOR_API UBTTask_RotateToFaceTarget : public UBTTaskNode
 	virtual FString GetStaticDescription() const override;               // Behavior Tree エディタでノードを選択したときに表示される説明文
 	//~ End UBTNode Interface
 
+	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;       // タスク開始時に1度だけ呼ばれる処理
+	virtual void TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;     // タスクが InProgress の間、毎フレーム呼ばれる処理
+
+	bool HasReachedAnglePercision(APawn* QueryPawn, AActor* TargetActor) const;     // Pawn がターゲットの方向を向いているかどうかを角度で判定する
+
 	UPROPERTY(EditAnywhere, Category = "Face Target")
 	float AnglePrecision;
 
