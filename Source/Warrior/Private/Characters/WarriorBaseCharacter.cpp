@@ -4,6 +4,7 @@
 #include "Characters/WarriorBaseCharacter.h"
 #include "AbilitySystem/WarriorAbilitySystemComponent.h"
 #include "AbilitySystem/WarriorAttributeSet.h"
+#include "MotionWarpingComponent.h"
 
 // Sets default values
 AWarriorBaseCharacter::AWarriorBaseCharacter()
@@ -20,6 +21,9 @@ AWarriorBaseCharacter::AWarriorBaseCharacter()
 
 	// キャラクターの属性セット（体力・攻撃力など）を生成し、能力システムと連携
 	WarriorAttributeSet = CreateDefaultSubobject<UWarriorAttributeSet>(TEXT("WarriorAttributeSet"));
+
+	// MotionWarpingComponent のインスタンスを生成し、キャラクターにアタッチする
+	MotionWarpingComponent = CreateDefaultSubobject<UMotionWarpingComponent>(TEXT("MotionWarpingComponent"));
 }
 
 // GameplayAbilitySystem に準拠するための AbilitySystemComponent 取得関数

@@ -12,6 +12,7 @@
 class UWarriorAbilitySystemComponent;
 class UWarriorAttributeSet;
 class UDataAsset_StartUpDataBase;
+class UMotionWarpingComponent;
 
 UCLASS()
 class WARRIOR_API AWarriorBaseCharacter : public ACharacter, public IAbilitySystemInterface, public IPawnCombatInterface, public IPawnUIInterface
@@ -46,6 +47,10 @@ protected:
 	// キャラクターの属性（体力・攻撃力など）を保持するセット
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AbilitySystem")
 	UWarriorAttributeSet* WarriorAttributeSet;
+
+	// Motion Warping を使用するためのコンポーネント
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MotionWarping")
+	UMotionWarpingComponent* MotionWarpingComponent;
 
 	// キャラクターの初期データを参照するためのプロパティ（エディタで設定可能、Blueprintから参照のみ）
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "CharacterData")
