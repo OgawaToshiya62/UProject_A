@@ -94,3 +94,9 @@ bool UWarriorFunctionLibrary::IsTargetPawnHostile(APawn* QueryPawn, APawn* Targe
 	// どちらかがチーム情報を持っていない場合は敵対とみなさない
 	return false;
 }
+
+// 指定したレベルでの最終的な値を返す
+float UWarriorFunctionLibrary::GetScalableFloatValueAtLevel(const FScalableFloat& InScalableFloat, float InLevel)
+{
+	return InScalableFloat.GetValueAtLevel(InLevel);
+}
