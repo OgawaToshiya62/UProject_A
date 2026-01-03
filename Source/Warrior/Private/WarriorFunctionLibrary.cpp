@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "WarriorFunctionLibrary.h"
@@ -6,8 +6,10 @@
 #include "AbilitySystem/WarriorAbilitySystemComponent.h"
 #include "Interface/PawnCombatInterface.h"
 #include "GenericTeamAgentInterface.h"
+#include "Kismet/KismetMathLibrary.h"
+#include "WarriorGameplayTags.h"
 
-// w’èƒAƒNƒ^[‚©‚ç WarriorAbilitySystemComponent ‚ğæ“¾‚·‚éi•K‚¸‘¶İ‚·‚é‘O’ñj
+// æŒ‡å®šã‚¢ã‚¯ã‚¿ãƒ¼ã‹ã‚‰ WarriorAbilitySystemComponent ã‚’å–å¾—ã™ã‚‹ï¼ˆå¿…ãšå­˜åœ¨ã™ã‚‹å‰æï¼‰
 UWarriorAbilitySystemComponent* UWarriorFunctionLibrary::NativeGetWarriorASCFromActor(AActor* InActor)
 {
 	check(InActor);
@@ -15,7 +17,7 @@ UWarriorAbilitySystemComponent* UWarriorFunctionLibrary::NativeGetWarriorASCFrom
 	return CastChecked<UWarriorAbilitySystemComponent>(UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(InActor));
 }
 
-// ƒAƒNƒ^[‚Éw’èƒ^ƒO‚ª‚È‚¯‚ê‚Î’Ç‰Á‚·‚é
+// ã‚¢ã‚¯ã‚¿ãƒ¼ã«æŒ‡å®šã‚¿ã‚°ãŒãªã‘ã‚Œã°è¿½åŠ ã™ã‚‹
 void UWarriorFunctionLibrary::AddGameplayTagToActorIfNone(AActor* InActor, FGameplayTag TagToAdd)
 {
 	UWarriorAbilitySystemComponent* ASC = NativeGetWarriorASCFromActor(InActor);
@@ -26,7 +28,7 @@ void UWarriorFunctionLibrary::AddGameplayTagToActorIfNone(AActor* InActor, FGame
 	}
 }
 
-// ƒAƒNƒ^[‚Éw’èƒ^ƒO‚ª‚ ‚ê‚Îíœ‚·‚é
+// ã‚¢ã‚¯ã‚¿ãƒ¼ã«æŒ‡å®šã‚¿ã‚°ãŒã‚ã‚Œã°å‰Šé™¤ã™ã‚‹
 void UWarriorFunctionLibrary::RemoveGameplayFromActorIfFound(AActor* InActor, FGameplayTag TagToRemove)
 {
 	UWarriorAbilitySystemComponent* ASC = NativeGetWarriorASCFromActor(InActor);
@@ -37,7 +39,7 @@ void UWarriorFunctionLibrary::RemoveGameplayFromActorIfFound(AActor* InActor, FG
 	}
 }
 
-// ƒAƒNƒ^[‚ªw’èƒ^ƒO‚ğ‚Á‚Ä‚¢‚é‚©‚ğ bool ‚Å•Ô‚·
+// ã‚¢ã‚¯ã‚¿ãƒ¼ãŒæŒ‡å®šã‚¿ã‚°ã‚’æŒã£ã¦ã„ã‚‹ã‹ã‚’ bool ã§è¿”ã™
 bool UWarriorFunctionLibrary::NativeDoesActorHaveTag(AActor* InActor, FGameplayTag TagToCheck)
 {
 	UWarriorAbilitySystemComponent* ASC = NativeGetWarriorASCFromActor(InActor);
@@ -45,13 +47,13 @@ bool UWarriorFunctionLibrary::NativeDoesActorHaveTag(AActor* InActor, FGameplayT
 	return ASC->HasMatchingGameplayTag(TagToCheck);
 }
 
-// ƒAƒNƒ^[‚ªw’èƒ^ƒO‚ğ‚Á‚Ä‚¢‚é‚©‚ğ Yes/No ‚Å•Ô‚·iBlueprint—pj
+// ã‚¢ã‚¯ã‚¿ãƒ¼ãŒæŒ‡å®šã‚¿ã‚°ã‚’æŒã£ã¦ã„ã‚‹ã‹ã‚’ Yes/No ã§è¿”ã™ï¼ˆBlueprintç”¨ï¼‰
 void UWarriorFunctionLibrary::BP_DoesActorHaveTag(AActor* InActor, FGameplayTag TagToCheck, EWarriorConfirmType& OutConfirmType)
 {
 	OutConfirmType = NativeDoesActorHaveTag(InActor, TagToCheck) ? EWarriorConfirmType::Yes : EWarriorConfirmType::No;
 }
 
-// Actor‚©‚çí“¬ƒRƒ“ƒ|[ƒlƒ“ƒg‚ğæ“¾‚·‚é
+// Actorã‹ã‚‰æˆ¦é—˜ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’å–å¾—ã™ã‚‹
 UPawnCombatComponent* UWarriorFunctionLibrary::NativeGetPawnCombatComponentFromActor(AActor* InActor)
 {
 	check(InActor);
@@ -64,7 +66,7 @@ UPawnCombatComponent* UWarriorFunctionLibrary::NativeGetPawnCombatComponentFromA
 	return nullptr;
 }
 
-// Actor‚©‚çí“¬ƒRƒ“ƒ|[ƒlƒ“ƒg‚ğæ“¾‚µŒ‹‰Ê‚ğEnum‚Å•Ô‚·
+// Actorã‹ã‚‰æˆ¦é—˜ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’å–å¾—ã—çµæœã‚’Enumã§è¿”ã™
 UPawnCombatComponent* UWarriorFunctionLibrary::BP_GetPawnCombatComponentFromActor(AActor* InActor, EWarriorValidType& OutValidType)
 {
 	UPawnCombatComponent* CombatComponent = NativeGetPawnCombatComponentFromActor(InActor);
@@ -74,29 +76,72 @@ UPawnCombatComponent* UWarriorFunctionLibrary::BP_GetPawnCombatComponentFromActo
 	return CombatComponent;
 }
 
-// “G‘ÎŠÖŒW‚É‚ ‚é‚©‚Ç‚¤‚©‚ğ”»’è‚·‚é
+// æ•µå¯¾é–¢ä¿‚ã«ã‚ã‚‹ã‹ã©ã†ã‹ã‚’åˆ¤å®šã™ã‚‹
 bool UWarriorFunctionLibrary::IsTargetPawnHostile(APawn* QueryPawn, APawn* TargetPawn)
 {
-	// ‚Ç‚¿‚ç‚©‚ª null ‚È‚çƒQ[ƒ€‚Æ‚µ‚Ä¬—§‚µ‚È‚¢‚½‚ßƒNƒ‰ƒbƒVƒ…‚³‚¹‚Ä‹C‚Ã‚¯‚é‚æ‚¤‚É‚·‚é
+	// ã©ã¡ã‚‰ã‹ãŒ null ãªã‚‰ã‚²ãƒ¼ãƒ ã¨ã—ã¦æˆç«‹ã—ãªã„ãŸã‚ã‚¯ãƒ©ãƒƒã‚·ãƒ¥ã•ã›ã¦æ°—ã¥ã‘ã‚‹ã‚ˆã†ã«ã™ã‚‹
 	check(QueryPawn && TargetPawn);
 
-	// Pawn ‚Ì Controller ‚ª IGenericTeamAgentInterface ‚ğÀ‘•‚µ‚Ä‚¢‚é‚©ƒ`ƒFƒbƒN
+	// Pawn ã® Controller ãŒ IGenericTeamAgentInterface ã‚’å®Ÿè£…ã—ã¦ã„ã‚‹ã‹ãƒã‚§ãƒƒã‚¯
 	IGenericTeamAgentInterface* QueryTeamAgent = Cast<IGenericTeamAgentInterface>(QueryPawn -> GetController());
 	IGenericTeamAgentInterface* TargetTeamAgent = Cast<IGenericTeamAgentInterface>(TargetPawn -> GetController());
 
-	// —¼•û‚ªƒ`[ƒ€î•ñ‚ğ‚Á‚Ä‚¢‚éê‡‚Ì‚İ”äŠr‚·‚é
+	// ä¸¡æ–¹ãŒãƒãƒ¼ãƒ æƒ…å ±ã‚’æŒã£ã¦ã„ã‚‹å ´åˆã®ã¿æ¯”è¼ƒã™ã‚‹
 	if (QueryTeamAgent && TargetTeamAgent)
 	{
-		// ƒ`[ƒ€ID‚ªˆÙ‚È‚ê‚Î“G‘ÎŠÖŒW‚Æ‚İ‚È‚·
+		// ãƒãƒ¼ãƒ IDãŒç•°ãªã‚Œã°æ•µå¯¾é–¢ä¿‚ã¨ã¿ãªã™
 		return QueryTeamAgent->GetGenericTeamId() != TargetTeamAgent -> GetGenericTeamId();
 	}
 
-	// ‚Ç‚¿‚ç‚©‚ªƒ`[ƒ€î•ñ‚ğ‚Á‚Ä‚¢‚È‚¢ê‡‚Í“G‘Î‚Æ‚İ‚È‚³‚È‚¢
+	// ã©ã¡ã‚‰ã‹ãŒãƒãƒ¼ãƒ æƒ…å ±ã‚’æŒã£ã¦ã„ãªã„å ´åˆã¯æ•µå¯¾ã¨ã¿ãªã•ãªã„
 	return false;
 }
 
-// w’è‚µ‚½ƒŒƒxƒ‹‚Å‚ÌÅI“I‚È’l‚ğ•Ô‚·
+// æŒ‡å®šã—ãŸãƒ¬ãƒ™ãƒ«ã§ã®æœ€çµ‚çš„ãªå€¤ã‚’è¿”ã™
 float UWarriorFunctionLibrary::GetScalableFloatValueAtLevel(const FScalableFloat& InScalableFloat, float InLevel)
 {
 	return InScalableFloat.GetValueAtLevel(InLevel);
+}
+
+// æ”»æ’ƒè€…ã¨è¢«å¼¾è€…ã®ä½ç½®é–¢ä¿‚ã‹ã‚‰ã€è¢«å¼¾æ–¹å‘ã®è§’åº¦ã‚’è¨ˆç®—ã™ã‚‹
+FGameplayTag UWarriorFunctionLibrary::ComputeHitReactDirectionTag(AActor* InAttacker, AActor* InVictim, float& OutAngleDifference)
+{
+	check(InAttacker && InVictim);
+
+	// è¢«å¼¾è€…ã®å‰æ–¹å‘ãƒ™ã‚¯ãƒˆãƒ«
+	const FVector VictimForward = InVictim->GetActorForwardVector();
+	// è¢«å¼¾è€…ã‹ã‚‰æ”»æ’ƒè€… ã®æ–¹å‘ãƒ™ã‚¯ãƒˆãƒ«
+	const FVector VictimToAttackerNormalized = (InAttacker->GetActorLocation() - InVictim->GetActorLocation()).GetSafeNormal();
+
+	// å†…ç©ã‹ã‚‰è§’åº¦å·®ï¼ˆ0ã€œ180Â°ï¼‰ã‚’æ±‚ã‚ã‚‹
+	const float DotResult = FVector::DotProduct(VictimForward, VictimToAttackerNormalized);
+	OutAngleDifference = UKismetMathLibrary::DegAcos(DotResult);
+
+	// å¤–ç©ã§å·¦å³ã©ã¡ã‚‰å´ã‹ã‚‰æ”»æ’ƒã•ã‚ŒãŸã‹ã‚’åˆ¤å®š
+	const FVector CrossResult = FVector::CrossProduct(VictimForward, VictimToAttackerNormalized);
+
+	// Z ãŒè² ãªã‚‰å·¦å´ã‹ã‚‰è§’åº¦ã‚’è² ã«ã™ã‚‹
+	if (CrossResult.Z < 0.f)
+	{
+		OutAngleDifference *= -1.f;
+	}
+
+	if (OutAngleDifference >= -45.f && OutAngleDifference <= 45.f)
+	{
+		return WarriorGameplayTags::Shared_Status_HitReact_Front;
+	}
+	else if (OutAngleDifference < -45.f && OutAngleDifference >= -135.f)
+	{
+		return WarriorGameplayTags::Shared_Status_HitReact_Left;
+	}
+	else if (OutAngleDifference < -135.f || OutAngleDifference > 135.f)
+	{
+		return WarriorGameplayTags::Shared_Status_HitReact_Back;
+	}
+	else if (OutAngleDifference > 45.f && OutAngleDifference <= 135.f)
+	{
+		return WarriorGameplayTags::Shared_Status_HitReact_Right;
+	}
+
+	return WarriorGameplayTags::Shared_Status_HitReact_Front;
 }
