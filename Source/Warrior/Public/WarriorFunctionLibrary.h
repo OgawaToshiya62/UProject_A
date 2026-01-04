@@ -29,7 +29,7 @@ public:
 
 	// アクターに指定タグがあれば削除する
 	UFUNCTION(BlueprintCallable, Category = "Warrior|FunctionLibrary")
-	static void RemoveGameplayFromActorIfFound(AActor* InActor, FGameplayTag TagToRemove);
+	static void RemoveGameplayTagFromActorIfFound(AActor* InActor, FGameplayTag TagToRemove);
 
 	// アクターが指定タグを持っているかを bool で返す
 	static bool NativeDoesActorHaveTag(AActor* InActor, FGameplayTag TagToCheck);
@@ -56,4 +56,8 @@ public:
 	// 攻撃者と被弾者の位置関係から被弾方向の角度を計算する
 	UFUNCTION(BlueprintPure, Category = "Warrior|FunctionLibrary")
 	static FGameplayTag ComputeHitReactDirectionTag(AActor* InAttacker, AActor* InVictim, float& OutAngleDifference);
+
+	// 防御者が攻撃者に対して正しい方向を向いているか（ブロック可能か）を判定する
+	UFUNCTION(BlueprintPure, Category = "Warrior|FunctionLibrary")
+	static bool IsValidBlock(AActor* InAttacker, AActor* InDefender);
 };
