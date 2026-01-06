@@ -14,6 +14,7 @@
 #include "DataAssets/StartUpData/DataAsset_HeroStartUpData.h"
 #include "Components/Combat/HeroCombatComponent.h"
 #include "Components/UI/HeroUIComponent.h"
+#include "AbilitySystemBlueprintLibrary.h"
 
 #include "WarriorDebugHelper.h"     // DebugHelperをインクルード
 
@@ -101,6 +102,9 @@ void AWarriorHeroCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 	WarriorInputComponent->BindNativeInputAction(InputConfigUDataAsset, WarriorGameplayTags::InputTag_Move, ETriggerEvent::Triggered, this, &ThisClass::Input_Move);     // InputConfigUDataAsset 入力設定アセット InputTag 意味を持った入力識別子 ETriggerEvent 入力が発生した瞬間に反応する this このキャラクター自身 &ThisClass:: 呼び出す関数ポインタ
 	WarriorInputComponent->BindNativeInputAction(InputConfigUDataAsset, WarriorGameplayTags::InputTag_Look, ETriggerEvent::Triggered, this, &ThisClass::Input_Look);     // 上と同じ感じ
 
+	WarriorInputComponent->BindNativeInputAction(InputConfigUDataAsset, WarriorGameplayTags::InputTag_SwitchTarget, ETriggerEvent::Triggered, this, &ThisClass::Input_SwitchTargetTriggered);
+	WarriorInputComponent->BindNativeInputAction(InputConfigUDataAsset, WarriorGameplayTags::InputTag_SwitchTarget, ETriggerEvent::Completed, this, &ThisClass::Input_SwitchTargetCompleted);
+
 	//入力設定データアセットに基づいてアビリティ入力をバインドする
 	WarriorInputComponent->BindAbilityInputAction(InputConfigUDataAsset, this, &ThisClass::Input_AbilityInputPressed, &ThisClass::Input_AbilityInputReleased);
 
@@ -145,6 +149,26 @@ void AWarriorHeroCharacter::Input_Look(const FInputActionValue& InputActionValue
 	{
 		AddControllerPitchInput(LookAxisVector.Y);                                                  // 上下方向(Pitch方向)の入力に回転させる処理
 	}
+}
+
+// ターゲット切り替えボタンが押されたときに呼ばれる処理
+void AWarriorHeroCharacter::Input_SwitchTargetTriggered(const FInputActionValue& InputActionValue)
+{
+	SwitchDirection = InputActionValue.Get<FVector2D>();
+}
+
+// ターゲット切り替えボタンが離されたときに呼ばれる処理
+void AWarriorHeroCharacter::Input_SwitchTargetCompleted(const FInputActionValue& InputActionValue)
+{
+	FGameplayEventData Data;
+
+	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(
+		this,
+		SwitchDirection.X > 0.f ? WarriorGameplayTags::Player_Event_SwitchTarget_Right : WarriorGameplayTags::Player_Event_SwitchTarget_Left,
+		Data
+	);
+
+	Debug::Print(TEXT("SwitchDirection: ") + SwitchDirection.ToString());
 }
 
 // プレイヤーがキーを押したことを AbilitySystemComponent に通知する

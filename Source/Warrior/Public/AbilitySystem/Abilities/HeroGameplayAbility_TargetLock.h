@@ -7,6 +7,7 @@
 #include "HeroGameplayAbility_TargetLock.generated.h"
 
 class UWarriorWidgetBase;
+class UInputMappingContext;
 
 /**
  * 
@@ -39,11 +40,19 @@ private:
 	void DrawTargetLockWidget();
 	// ロックオン中のターゲットのワールド位置をスクリーン座標に変換し,ターゲットロック用ウィジェットをその位置に配置する
 	void SetTargetLockWidgetPosition();
+	// ターゲットロック開始時に移動速度を制限するための初期化処理
+	void InitTargetLockMovement();
+	// ターゲットロック開始時に、ロックオン専用の入力マッピングを追加する
+	void InitTargetLockMappingContext();
 
 	// ロックオンアビリティを強制終了する
 	void CancelTargetLockAbility();
 	// ロックオン解除時に内部状態をリセットする
 	void CleanUp();
+	// ターゲットロック終了時に移動速度を元に戻す処理
+	void ResetTargetLockMovement();
+	// ターゲットロック終了時に、追加した入力マッピングを削除して元の操作に戻す
+	void ResetTargetLockMappingContext();
 
 	// BoxTrace を飛ばす距離（プレイヤー前方方向）
 	UPROPERTY(EditDefaultsOnly, Category = "Target Lock")
@@ -65,6 +74,18 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Target Lock")
 	TSubclassOf<UWarriorWidgetBase> TargetLockWidgetClass;
 
+	// ターゲットロック中にキャラクターの向きを補正する際の補間速度
+	UPROPERTY(EditDefaultsOnly, Category = "Target Lock")
+	float TargetLockRotationInterpSpeed = 5.f;
+
+	// ターゲットロック中の最大移動速度
+	UPROPERTY(EditDefaultsOnly, Category = "Target Lock")
+	float TargetLockMaxWalkSpeed = 150.f;
+
+	// ロックオン中に使用する入力マッピング
+	UPROPERTY(EditDefaultsOnly, Category = "Target Lock")
+	UInputMappingContext* TargetLockMappingContext;
+
 	// ロックオン候補として検出されたアクター一覧
 	UPROPERTY()
 	TArray<AActor*> AvailableActorsToLock;
@@ -80,4 +101,8 @@ private:
 	// ターゲットロックウィジェットのサイズ（初回に自動取得）
 	UPROPERTY()
 	FVector2D TargetLockWidgetSize = FVector2D::ZeroVector;
+
+	// ロックオン前の移動速度を保存しておくキャッシュ
+	UPROPERTY()
+	float CachedDefaultMaxWalkSpeed = 0.f;
 };

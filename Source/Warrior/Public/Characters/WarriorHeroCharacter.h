@@ -72,6 +72,12 @@ private:
 	void Input_Move(const FInputActionValue& InputActionValue);                                                          // プレイヤーの移動(Move)入力を処理する関数の宣言
 	void Input_Look(const FInputActionValue& InputActionValue);                                                          // プレイヤーの視点(Look)入力を処理する関数の宣言
 
+	void Input_SwitchTargetTriggered(const FInputActionValue& InputActionValue);     // ターゲット切り替えボタンが押されたときに呼ばれる処理
+	void Input_SwitchTargetCompleted(const FInputActionValue& InputActionValue);     // ターゲット切り替えボタンが離されたときに呼ばれる処理
+
+	// ターゲット切り替え入力の方向（左右）を保持するための変数
+	FVector2D SwitchDirection = FVector2D::ZeroVector;
+
 	// プレイヤーがキーを押したときに呼ばれる関数の宣言 入力タグに対応するアビリティの開始を通知する
 	void Input_AbilityInputPressed(FGameplayTag InInputTag);
 	// プレイヤーがキーを離したときに呼ばれる関数の宣言 入力タグに対応するアビリティの終了を通知する
