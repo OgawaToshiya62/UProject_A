@@ -29,6 +29,10 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	void OnTargetLockTick(float DeltaTime);
 
+	// 入力方向（左 or 右）に応じてロックオン対象を切り替える
+	UFUNCTION(BlueprintCallable)
+	void SwitchTarget(const FGameplayTag& InSwitchDirectionTag);
+
 private:
 	// ロックオン開始処理
 	void TryLockOnTarget();
@@ -36,6 +40,8 @@ private:
 	void GetAvailableActorsToLock();
 	// ロックオン候補の中から、プレイヤーに最も近いアクターを返す
 	AActor* GetNearestTargetFromAvailableActors(const TArray<AActor*>& InAvailableActors);
+	// 現在ロック中のターゲットを基準に、周囲の敵を左右に分類する
+	void GetAvailableActorsAroundTarget(TArray<AActor*>& OutActorsOnLeft, TArray<AActor*>& OutActorsOnRight);
 	// ターゲットロック用のウィジェットを画面に表示する
 	void DrawTargetLockWidget();
 	// ロックオン中のターゲットのワールド位置をスクリーン座標に変換し,ターゲットロック用ウィジェットをその位置に配置する
