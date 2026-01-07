@@ -92,6 +92,10 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Target Lock")
 	UInputMappingContext* TargetLockMappingContext;
 
+	// ロックオン時にカメラの視点を少し上げる
+	UPROPERTY(EditDefaultsOnly, Category = "Target Lock")
+	float TargetLockCameraOffsetDistance = 20.f;
+
 	// ロックオン候補として検出されたアクター一覧
 	UPROPERTY()
 	TArray<AActor*> AvailableActorsToLock;
