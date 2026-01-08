@@ -161,3 +161,18 @@ bool UWarriorFunctionLibrary::IsValidBlock(AActor* InAttacker, AActor* InDefende
 
 	return DotResult < -0.1f;
 }
+
+// GameplayEffectSpecHandle をターゲットに適用するためのユーティリティ関数
+bool UWarriorFunctionLibrary::ApplyGameplayEffectSpecHandleToTargetActor(AActor* InInstigator, AActor* InTargetActor, const FGameplayEffectSpecHandle& InSpecHandle)
+{
+	// 発射した側（Instigator）の AbilitySystemComponent を取得
+	UWarriorAbilitySystemComponent* SourceASC = NativeGetWarriorASCFromActor(InInstigator);
+	// ダメージを受ける側（Target）の AbilitySystemComponent を取得
+	UWarriorAbilitySystemComponent* TargetASC = NativeGetWarriorASCFromActor(InTargetActor);
+
+	// GameplayEffectSpec をターゲットに適用
+	FActiveGameplayEffectHandle ActiveGameplayEffectHandle = SourceASC->ApplyGameplayEffectSpecToTarget(*InSpecHandle.Data, TargetASC);
+
+	// 成功したかどうかを返す
+	return ActiveGameplayEffectHandle.WasSuccessfullyApplied();
+}

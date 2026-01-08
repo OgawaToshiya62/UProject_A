@@ -60,4 +60,8 @@ public:
 	// 防御者が攻撃者に対して正しい方向を向いているか（ブロック可能か）を判定する
 	UFUNCTION(BlueprintPure, Category = "Warrior|FunctionLibrary")
 	static bool IsValidBlock(AActor* InAttacker, AActor* InDefender);
+
+	// GameplayEffectSpecHandle をターゲットに適用するためのユーティリティ関数
+	UFUNCTION(BlueprintCallable, Category = "Warrior|FunctionLibrary")
+	static bool ApplyGameplayEffectSpecHandleToTargetActor(AActor* InInstigator, AActor* InTargetActor, const FGameplayEffectSpecHandle& InSpecHandle);
 };

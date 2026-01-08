@@ -5,6 +5,11 @@
 #include "Components/BoxComponent.h"
 #include "NiagaraComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
+#include "WarriorFunctionLibrary.h"
+#include "WarriorGameplayTags.h"
+#include "AbilitySystemBlueprintLibrary.h"
+
+#include "WarriorDebugHelper.h"
 
 AWarriorProjectileBase::AWarriorProjectileBase()
 {
@@ -20,6 +25,9 @@ AWarriorProjectileBase::AWarriorProjectileBase()
 	ProjectileCollisionBox -> SetCollisionResponseToChannel(ECC_Pawn, ECR_Block);
 	ProjectileCollisionBox -> SetCollisionResponseToChannel(ECC_WorldDynamic, ECR_Block);
 	ProjectileCollisionBox -> SetCollisionResponseToChannel(ECC_WorldStatic, ECR_Block);
+	// コリジョンイベントをバインドする
+	ProjectileCollisionBox -> OnComponentHit.AddUniqueDynamic(this, &ThisClass::OnProjectileHit);
+	ProjectileCollisionBox -> OnComponentBeginOverlap.AddUniqueDynamic(this, &ThisClass::OnProjectileBeginOverlap);
 
 	// Niagara
 	ProjectileNiagaraComponent = CreateDefaultSubobject<UNiagaraComponent>(TEXT("ProjectileNiagaraComponent"));
@@ -40,7 +48,76 @@ void AWarriorProjectileBase::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	// ダメージポリシーが「オーバーラップ時」の場合、Pawnに対して Overlap 反応に切り替える
+	if (ProjectileDamagePolicy == EProjectileDamagePolicy::OnBeginOverlap)
+	{
+		ProjectileCollisionBox->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
+	}
 }
 
+// 投射物が何かに衝突したときに呼ばれる
+void AWarriorProjectileBase::OnProjectileHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+{
+	BP_OnSpawnProjectileHitFX(Hit.ImpactPoint);
 
+	APawn* HitPawn = Cast<APawn>(OtherActor);
 
+	if (!HitPawn || !UWarriorFunctionLibrary::IsTargetPawnHostile(GetInstigator(), HitPawn))
+	{
+		Destroy();
+		return;
+	}
+
+	bool bIsValidBlock = false;
+
+	const bool bIsPlayerBlocking = UWarriorFunctionLibrary::NativeDoesActorHaveTag(HitPawn, WarriorGameplayTags::Player_Status_Blocking);
+
+	if (bIsPlayerBlocking)
+	{
+		bIsValidBlock = UWarriorFunctionLibrary::IsValidBlock(this, HitPawn);
+	}
+
+	FGameplayEventData Data;
+	Data.Instigator = this;
+	Data.Target = HitPawn;
+
+	if (bIsValidBlock)
+	{
+		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(
+			HitPawn,
+			WarriorGameplayTags::Player_Event_SuccessfulBlock,
+			Data
+		);
+	}
+	else
+	{
+		HandleApplyProjectileDamage(HitPawn, Data);
+	}
+
+	Destroy();
+}
+
+// 投射物が何かと重なったときに呼ばれる
+void AWarriorProjectileBase::OnProjectileBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+}
+
+// 投射物が命中した相手にダメージを適用する処理
+void AWarriorProjectileBase::HandleApplyProjectileDamage(APawn* InHitPawn, const FGameplayEventData& InPayload)
+{
+	// ProjectileDamageEffectSpecHandle が有効かチェック
+	checkf(ProjectileDamageEffectSpecHandle.IsValid(), TEXT("Forgot to assign a valid spec handle to the projectile: %s"), *GetActorNameOrLabel());
+
+	// ダメージを適用する
+	const bool bWasApplied = UWarriorFunctionLibrary::ApplyGameplayEffectSpecHandleToTargetActor(GetInstigator(), InHitPawn, ProjectileDamageEffectSpecHandle);
+
+	// ダメージが適用された場合、ヒットリアクションのイベントを送る
+	if (bWasApplied)
+	{
+		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(
+			InHitPawn,
+			WarriorGameplayTags::Shared_Event_HitReact,
+			InPayload
+		);
+	}
+}
