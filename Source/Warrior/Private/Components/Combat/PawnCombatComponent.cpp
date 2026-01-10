@@ -54,29 +54,47 @@ void UPawnCombatComponent::ToggleWeaponCollision(bool bShouldEnable, EToggleDame
 {
 	if (ToggleDamageType == EToggleDamegeType::CurrentEquippedWeapon)
 	{
-		AWarriorWeaponBase* WeaponToToggle = GetCharacterCurrentEquippedWeapon();
-
-		check(WeaponToToggle);
-
-		if (bShouldEnable)
-		{
-			WeaponToToggle->GetWeaponCollisionBox()->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
-		}
-		else
-		{
-			WeaponToToggle->GetWeaponCollisionBox()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-
-			OverlappedActors.Empty();
-		}
+		ToggleCurrentEquippedWeaponCollision(bShouldEnable);
 	}
-
-	// TODO:Handle body collision boxes
+	else
+	{
+		ToggleBodyCollisionBoxCollision(bShouldEnable, ToggleDamageType);
+	}
 }
 
+// 武器がアクターにヒットしたときの処理を定義する仮想関数
 void UPawnCombatComponent::OnHitTargetActor(AActor* HitActor)
 {
 }
 
+// 武器がアクターから離れたときの処理を定義する仮想関数
 void UPawnCombatComponent::OnWeaponPulledFromTargetActor(AActor* InteractedActor)
+{
+}
+
+// 現在装備している武器のコリジョン（当たり判定）を有効化／無効化するための関数
+void UPawnCombatComponent::ToggleCurrentEquippedWeaponCollision(bool bShouldEnable)
+{
+	// 現在キャラクターが装備している武器を取得
+	AWarriorWeaponBase* WeaponToToggle = GetCharacterCurrentEquippedWeapon();
+
+	check(WeaponToToggle);
+
+	if (bShouldEnable)
+	{
+		// 攻撃開始：武器のコリジョンを有効化
+		WeaponToToggle->GetWeaponCollisionBox()->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	}
+	else
+	{
+		// 攻撃終了：武器のコリジョンを無効化
+		WeaponToToggle->GetWeaponCollisionBox()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		// 多段ヒットを防ぐため、攻撃中に当たったアクターの記録をリセット
+		OverlappedActors.Empty();
+	}
+}
+
+// 左手・右手のボディコリジョン（素手攻撃用）を有効化／無効化するための関数
+void UPawnCombatComponent::ToggleBodyCollisionBoxCollision(bool bShouldEnable, EToggleDamegeType ToggleDamageType)
 {
 }

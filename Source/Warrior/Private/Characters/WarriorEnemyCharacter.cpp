@@ -9,6 +9,8 @@
 #include "Components/UI/EnemyUIComponent.h"
 #include "Components/WidgetComponent.h"
 #include "Widgets/WarriorWidgetBase.h"
+#include "Components/BoxComponent.h"
+#include "WarriorFunctionLibrary.h"
 
 #include "WarriorDebugHelper.h"
 
@@ -39,6 +41,18 @@ AWarriorEnemyCharacter::AWarriorEnemyCharacter()
 	// 敵の頭上に表示するHPバー用のWidgetComponentを生成し、メッシュにアタッチ
 	EnemyHealthWidgetComponent = CreateDefaultSubobject<UWidgetComponent>("EnemyHealthWidgetComponent");
 	EnemyHealthWidgetComponent->SetupAttachment(GetMesh());
+
+	// 左手の攻撃判定用コリジョン
+	LeftHandCollisionBox = CreateDefaultSubobject<UBoxComponent>("LeftHandCollisionBox");
+	LeftHandCollisionBox -> SetupAttachment(GetMesh());
+	LeftHandCollisionBox -> SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	LeftHandCollisionBox -> OnComponentBeginOverlap.AddUniqueDynamic(this, &ThisClass::OnBodyCollisionBoxBeginOverlap);
+
+	// 右手の攻撃判定用コリジョン
+	RightHandCollisionBox = CreateDefaultSubobject<UBoxComponent>("RightHandCollisionBox");
+	RightHandCollisionBox->SetupAttachment(GetMesh());
+	RightHandCollisionBox->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	RightHandCollisionBox->OnComponentBeginOverlap.AddUniqueDynamic(this, &ThisClass::OnBodyCollisionBoxBeginOverlap);
 }
 
 // 敵キャラクターの戦闘コンポーネントを返す
@@ -76,6 +90,39 @@ void AWarriorEnemyCharacter::PossessedBy(AController* NewController)
 
 	// 初期データをセットアップ
 	InitEnemyStartUpData();
+}
+
+// エディタ上でプロパティが変更されたときに呼ばれるコールバック
+#if WITH_EDITOR
+void AWarriorEnemyCharacter::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
+{
+	// 親クラスの処理を必ず実行
+	Super::PostEditChangeProperty(PropertyChangedEvent);
+
+	// 左手のボーン名が変更された場合、コリジョンを新しいボーンへ再アタッチ
+	if (PropertyChangedEvent.GetMemberPropertyName() == GET_MEMBER_NAME_CHECKED(ThisClass, LeftHandCollisionBoxAttachBoneName))
+	{
+		LeftHandCollisionBox -> AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, LeftHandCollisionBoxAttachBoneName);
+	}
+
+	// 右手のボーン名が変更された場合も同様に再アタッチ
+	if (PropertyChangedEvent.GetMemberPropertyName() == GET_MEMBER_NAME_CHECKED(ThisClass, RightHandCollisionBoxAttachBoneName))
+	{
+		RightHandCollisionBox -> AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, RightHandCollisionBoxAttachBoneName);
+	}
+}
+#endif
+
+// 手のコリジョンが他のアクターと重なった瞬間に呼ばれるコールバック
+void AWarriorEnemyCharacter::OnBodyCollisionBoxBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	if (APawn* HitPawn = Cast<APawn>(OtherActor))
+	{
+		if (UWarriorFunctionLibrary::IsTargetPawnHostile(this, HitPawn))
+		{
+			EnemyCombatComponent -> OnHitTargetActor(HitPawn);
+		}
+	}
 }
 
 // 敵キャラクターの初期データを非同期ロードして AbilitySystem に付与する

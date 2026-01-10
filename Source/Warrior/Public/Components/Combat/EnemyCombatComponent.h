@@ -16,4 +16,8 @@ class WARRIOR_API UEnemyCombatComponent : public UPawnCombatComponent
 	
 public:
 	virtual void OnHitTargetActor(AActor* HitActor) override;
+
+protected:
+	// 左手・右手のボディコリジョン（素手攻撃用）を有効化／無効化するための関数
+	virtual void ToggleBodyCollisionBoxCollision(bool bShouldEnable, EToggleDamegeType ToggleDamageType) override;
 };

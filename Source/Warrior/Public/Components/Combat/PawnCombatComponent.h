@@ -53,6 +53,11 @@ public:
 	virtual void OnWeaponPulledFromTargetActor(AActor* InteractedActor);
 
 protected:
+	// 現在装備している武器のコリジョン（当たり判定）を有効化／無効化するための関数
+	virtual void ToggleCurrentEquippedWeaponCollision(bool bShouldEnable);
+	// 左手・右手のボディコリジョン（素手攻撃用）を有効化／無効化するための関数
+	virtual void ToggleBodyCollisionBoxCollision(bool bShouldEnable, EToggleDamegeType ToggleDamageType);
+
 	// 現在コリジョンで重なっているアクターを保持する配列
 	TArray<AActor*> OverlappedActors;
 
