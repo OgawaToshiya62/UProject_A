@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "DataAssets/StartUpData/DataAsset_StartUpDataBase.h"
 #include "WarriorTypes/WarriorStructTypes.h"
+#include "AbilitySystem/Abilities/WarriorHeroGameplayAbility.h"
 #include "DataAsset_HeroStartUpData.generated.h"
 
 /**

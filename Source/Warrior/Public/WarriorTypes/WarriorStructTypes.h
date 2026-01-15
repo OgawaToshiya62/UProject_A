@@ -28,6 +28,21 @@ struct FWarriorHeroAbilitySet
 	bool IsValid() const;
 };
 
+// ヒーローのスペシャルアビリティ用のデータセット
+USTRUCT(BlueprintType)
+struct FWarriorHeroSpecialAbilitySet : public FWarriorHeroAbilitySet
+{
+	GENERATED_BODY()
+
+	// UI に表示するアビリティアイコンのマテリアル
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TSoftObjectPtr<UMaterialInterface> SoftAbilityIconMaterial;
+
+	// このスペシャルアビリティに対応するクールダウンタグ
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (Categories = "Player.Cooldown"))
+	FGameplayTag AbilityCooldownTag;
+};
+
 // ヒーローの武器に関連するデータを保持する構造体
 USTRUCT(BlueprintType)
 struct FWarriorHeroWeaponData
@@ -45,6 +60,10 @@ struct FWarriorHeroWeaponData
 	// 武器に紐づくデフォルトアビリティの一覧
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (TitleProperty = "InputTag"))
 	TArray<FWarriorHeroAbilitySet> DefaultWeaponAbilities;
+
+	// ヒーローが持つスペシャルアビリティの一覧
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (TitleProperty = "InputTag"))
+	TArray<FWarriorHeroSpecialAbilitySet> SpecialWeaponAbilities;
 
 	// 武器の基本ダメージを表すプロパティ
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)

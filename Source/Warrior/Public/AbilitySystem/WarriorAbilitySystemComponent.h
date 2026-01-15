@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "AbilitySystemComponent.h"
 #include "WarriorTypes/WarriorStructTypes.h"
+#include "AbilitySystem/Abilities/WarriorHeroGameplayAbility.h"
 #include "WarriorAbilitySystemComponent.generated.h"
 
 /**
@@ -23,7 +24,7 @@ public:
 
 	// 指定された武器アビリティセットをヒーローに付与する関数
 	UFUNCTION(BlueprintCallable, Category = "Warrior|Ability", meta = (ApplyLevel = "1"))
-	void GrantHeroWeaponAbilities(const TArray<FWarriorHeroAbilitySet>& InDefaultWeaponAbilities, int32 ApplyLevel, TArray<FGameplayAbilitySpecHandle>& OutGrantedAbilitySpecHandles);
+	void GrantHeroWeaponAbilities(const TArray<FWarriorHeroAbilitySet>& InDefaultWeaponAbilities, const TArray<FWarriorHeroSpecialAbilitySet>& InSpecialWeaponAbilities, int32 ApplyLevel, TArray<FGameplayAbilitySpecHandle>& OutGrantedAbilitySpecHandles);
 
 	// 指定されたアビリティハンドルに対応する武器アビリティを削除する関数
 	UFUNCTION(BlueprintCallable, Category = "Warrior|Ability")
