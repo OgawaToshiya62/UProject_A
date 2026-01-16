@@ -176,3 +176,9 @@ bool UWarriorFunctionLibrary::ApplyGameplayEffectSpecHandleToTargetActor(AActor*
 	// 成功したかどうかを返す
 	return ActiveGameplayEffectHandle.WasSuccessfullyApplied();
 }
+
+// Blueprint から呼び出せるカウントダウン処理
+void UWarriorFunctionLibrary::CountDown(const UObject* WorldContextObject, float TotalTime, float UpdateInterval, float& OutRemainingTime, EWarriorCountDownActionInput CountDownInput, UPARAM(DisplayName = "Output") EWarriorCountDownActionOutput& CountDownOutput, FLatentActionInfo LatentInfo)
+{
+}
+

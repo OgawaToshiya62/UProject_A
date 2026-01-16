@@ -13,6 +13,9 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnEquippedWeaponChangedDelegate, TS
 // アビリティアイコンのスロット更新を通知するデリゲート
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnAbilityIconSlotUpdateDelegate, FGameplayTag, AbilityInputTag, TSoftObjectPtr<UMaterialInterface>, SoftAbilityIconMaterial);
 
+// アビリティのクールダウンが開始されたときに通知するデリゲート
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnAbilityCooldownBeginDelegate, FGameplayTag, AbilityInputTag, float, TotalCooldownTime, float, RemainingCooldownTime);
+
 /**
  * 
  */
@@ -33,4 +36,8 @@ public:
 	// Blueprint からバインド可能なアビリティアイコン更新イベント
 	UPROPERTY(BlueprintCallable, BlueprintAssignable)
 	FOnAbilityIconSlotUpdateDelegate OnAbilityIconSlotUpdate;
+
+	// Blueprint からバインド可能なクールダウン開始イベント
+	UPROPERTY(BlueprintCallable, BlueprintAssignable)
+	FOnAbilityCooldownBeginDelegate OnAbilityCooldownBegin;
 };

@@ -23,3 +23,20 @@ enum class EWarriorSuccessType : uint8
 	Successful,
 	Failed
 };
+
+// カウントダウン処理に対する入力アクション
+UENUM()
+enum class EWarriorCountDownActionInput : uint8
+{
+	Start,
+	Cancel
+};
+
+// カウントダウン処理の結果を表す出力アクション
+UENUM()
+enum class EWarriorCountDownActionOutput : uint8
+{
+	Updated,
+	Completed,
+	Cancelled
+};
