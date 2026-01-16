@@ -9,9 +9,9 @@ class FWarriorCountDownAction : public FPendingLatentAction
 {
 public:
 	// カウントダウンアクションの初期化
-	FWarriorCountDownAction(float InTotalCountTime, float InUpdateInterval, float& InOutRemainingTime, EWarriorCountDownActionOutput& InCountDownOutput, const FLatentActionInfo& LatentInfo)
+	FWarriorCountDownAction(float InTotalCountDownTime, float InUpdateInterval, float& InOutRemainingTime, EWarriorCountDownActionOutput& InCountDownOutput, const FLatentActionInfo& LatentInfo)
 		: bNeedToCancel(false)
-		, TotalCountDownTime(InTotalCountTime)
+		, TotalCountDownTime(InTotalCountDownTime)
 		, UpdateInterval(InUpdateInterval)
 		, OutRemainingTime(InOutRemainingTime)
 		, CountDownOutput(InCountDownOutput)
@@ -22,6 +22,12 @@ public:
 		, ElapsedTimeSinceStart(0.f)
 	{
 	}
+
+	// Latent Action の毎フレーム更新処理
+	virtual void UpdateOperation(FLatentResponse& Response) override;
+
+	// カウントダウンをキャンセルするための関数
+	void CancelAction();
 
 private:
 	// カウントダウンがキャンセルされたか

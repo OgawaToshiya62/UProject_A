@@ -8,6 +8,7 @@
 #include "GenericTeamAgentInterface.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "WarriorGameplayTags.h"
+#include "WarriorTypes/WarriorCountDownAction.h"
 
 #include "WarriorDebugHelper.h"
 
@@ -180,5 +181,47 @@ bool UWarriorFunctionLibrary::ApplyGameplayEffectSpecHandleToTargetActor(AActor*
 // Blueprint から呼び出せるカウントダウン処理
 void UWarriorFunctionLibrary::CountDown(const UObject* WorldContextObject, float TotalTime, float UpdateInterval, float& OutRemainingTime, EWarriorCountDownActionInput CountDownInput, UPARAM(DisplayName = "Output") EWarriorCountDownActionOutput& CountDownOutput, FLatentActionInfo LatentInfo)
 {
+	UWorld* World = nullptr;
+
+	// WorldContextObject から UWorld を取得
+	if (GEngine)
+	{
+		World = GEngine -> GetWorldFromContextObject(WorldContextObject, EGetWorldErrorMode::LogAndReturnNull);
+	}
+
+	if (!World)
+	{
+		return;     // ワールドが無ければ何もできない
+	}
+
+	// ワールドに紐づく Latent Action Manager を取得
+	FLatentActionManager& LatentActionManager = World -> GetLatentActionManager();
+
+	// すでに同じ UUID のカウントダウンアクションが存在するか確認
+	FWarriorCountDownAction* FoundAction = LatentActionManager.FindExistingAction<FWarriorCountDownAction>(LatentInfo.CallbackTarget, LatentInfo.UUID);
+
+	// --- カウントダウン開始 ---
+	if (CountDownInput == EWarriorCountDownActionInput::Start)
+	{
+		// 既に同じアクションが存在しない場合のみ新規作成
+		if (!FoundAction)
+		{
+			LatentActionManager.AddNewAction(
+				LatentInfo.CallbackTarget,
+				LatentInfo.UUID,
+				new FWarriorCountDownAction(TotalTime, UpdateInterval, OutRemainingTime, CountDownOutput, LatentInfo)
+			);
+		}
+	}
+
+	// --- カウントダウンキャンセル ---
+	if (CountDownInput == EWarriorCountDownActionInput::Cancel)
+	{
+		if (FoundAction)
+		{
+			// 次の Tick でキャンセルされるようフラグを立てる
+			FoundAction -> CancelAction();
+		}
+	}
 }
 

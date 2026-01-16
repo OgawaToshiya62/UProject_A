@@ -34,6 +34,10 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Warrior|Ability")
 	FGameplayEffectSpecHandle MakeHeroDamageEffectSpecHandle(TSubclassOf<UGameplayEffect> EffectClass, float InWeaponBaseDamage, FGameplayTag InCurrentAttackTypeTag, int32 InUsedComboCount);
 
+	// 指定したクールダウンタグを持つアビリティの 総クールダウン時間 残りクールダウン時間 を取得する
+	UFUNCTION(BlueprintCallable, Category = "Warrior|Ability")
+	bool GetAbilityRemainingCooldownByTag(FGameplayTag InCooldownTag, float& TotalCooldownTime, float& RemainingCooldownTime);
+
 private:
 	// キャッシュ用の弱参照ポインタ（オブジェクト破棄に強い）
 	TWeakObjectPtr<AWarriorHeroCharacter> CachedWarriorHeroCharacter;

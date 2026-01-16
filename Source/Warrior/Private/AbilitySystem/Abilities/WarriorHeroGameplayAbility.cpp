@@ -69,3 +69,26 @@ FGameplayEffectSpecHandle UWarriorHeroGameplayAbility::MakeHeroDamageEffectSpecH
 	// 完成したスペックを返す
 	return EffectSpecHandle;
 }
+
+// クールダウンタグに一致するアクティブな GameplayEffect を検索しその残り時間と総時間を取得する
+bool UWarriorHeroGameplayAbility::GetAbilityRemainingCooldownByTag(FGameplayTag InCooldownTag, float& TotalCooldownTime, float& RemainingCooldownTime)
+{
+	// クールダウンタグが無効なら即エラー
+	check(InCooldownTag.IsValid());
+
+	// 指定タグを持つクールダウン効果を検索するためのクエリを作成
+	FGameplayEffectQuery CooldownQuery = FGameplayEffectQuery::MakeQuery_MatchAnyOwningTags(InCooldownTag.GetSingleTagContainer());
+
+	// クエリに一致するアクティブな GameplayEffect の「残り時間」と「総時間」を取得
+	TArray< TPair <float, float> > TimeRemainingAndDuration = GetAbilitySystemComponentFromActorInfo() -> GetActiveEffectsTimeRemainingAndDuration(CooldownQuery);
+
+	// 一つでも見つかった場合は、その最初のものを使用
+	if (!TimeRemainingAndDuration.IsEmpty())
+	{
+		RemainingCooldownTime = TimeRemainingAndDuration[0].Key;
+		TotalCooldownTime = TimeRemainingAndDuration[0].Value;
+	}
+
+	// 残り時間が 0 より大きければ「まだクールダウン中」
+	return RemainingCooldownTime > 0.f;
+}
