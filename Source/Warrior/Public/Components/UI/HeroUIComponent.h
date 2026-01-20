@@ -16,6 +16,8 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnAbilityIconSlotUpdateDelegate, F
 // アビリティのクールダウンが開始されたときに通知するデリゲート
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnAbilityCooldownBeginDelegate, FGameplayTag, AbilityInputTag, float, TotalCooldownTime, float, RemainingCooldownTime);
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnStoneInteractedDelegate, bool, bShouldDisplayInputKey);
+
 /**
  * 
  */
@@ -40,4 +42,8 @@ public:
 	// Blueprint からバインド可能なクールダウン開始イベント
 	UPROPERTY(BlueprintCallable, BlueprintAssignable)
 	FOnAbilityCooldownBeginDelegate OnAbilityCooldownBegin;
+
+	// 石に関するインタラクション（拾う・消費するなど）が発生したときにBlueprint 側へ通知するためのデリゲート
+	UPROPERTY(BlueprintCallable, BlueprintAssignable)
+	FOnStoneInteractedDelegate OnStoneInteracted;
 };

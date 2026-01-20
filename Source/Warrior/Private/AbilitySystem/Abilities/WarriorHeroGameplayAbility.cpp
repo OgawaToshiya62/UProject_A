@@ -35,6 +35,12 @@ UHeroCombatComponent* UWarriorHeroGameplayAbility::GetHeroCombatComponentFromAct
 	return GetHeroCharacterFromActorInfo()->GetHeroCombatComponent();
 }
 
+// アビリティを発動したキャラクター（Hero）から UI コンポーネントを取得する
+UHeroUIComponent* UWarriorHeroGameplayAbility::GetHeroUIComponentFromActorInfo()
+{
+	return GetHeroCharacterFromActorInfo()->GetHeroUIComponent();
+}
+
 // ダメージ効果のスペックを生成する関数
 FGameplayEffectSpecHandle UWarriorHeroGameplayAbility::MakeHeroDamageEffectSpecHandle(TSubclassOf<UGameplayEffect> EffectClass, float InWeaponBaseDamage, FGameplayTag InCurrentAttackTypeTag, int32 InUsedComboCount)
 {

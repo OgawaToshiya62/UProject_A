@@ -30,6 +30,10 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Warrior|Ability")
 	UHeroCombatComponent* GetHeroCombatComponentFromActorInfo();
 
+	// アビリティの ActorInfo から、プレイヤーが持つ UI コンポーネントを取得する
+	UFUNCTION(BlueprintPure, Category = "Warrior|Ability")
+	UHeroUIComponent* GetHeroUIComponentFromActorInfo();
+
 	// ダメージ効果のスペックを生成する関数
 	UFUNCTION(BlueprintPure, Category = "Warrior|Ability")
 	FGameplayEffectSpecHandle MakeHeroDamageEffectSpecHandle(TSubclassOf<UGameplayEffect> EffectClass, float InWeaponBaseDamage, FGameplayTag InCurrentAttackTypeTag, int32 InUsedComboCount);
