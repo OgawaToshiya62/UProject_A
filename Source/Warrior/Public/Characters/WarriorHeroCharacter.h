@@ -69,14 +69,17 @@ private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "CharacterData", meta = (AllowPrivateAccess = "true"))     // EditDefaultsOnly BPでクラスのデフォルト値のみ編集可能 BlueprintReadOnly BPから読み取りができるが書き換え不可 AllowPrivateAccess BPからpribateでもみえるようにする補足設定
 	UDataAsset_InputConfig* InputConfigUDataAsset;                                                                       // UDataAsset_InputConfig UDataAssetを継承したクラス InputConfigUDataAssetは変数名
 
+	// ターゲット切り替え入力の方向（左右）を保持するための変数
+	UPROPERTY()
+	FVector2D SwitchDirection = FVector2D::ZeroVector;
+
 	void Input_Move(const FInputActionValue& InputActionValue);                                                          // プレイヤーの移動(Move)入力を処理する関数の宣言
 	void Input_Look(const FInputActionValue& InputActionValue);                                                          // プレイヤーの視点(Look)入力を処理する関数の宣言
 
 	void Input_SwitchTargetTriggered(const FInputActionValue& InputActionValue);     // ターゲット切り替えボタンが押されたときに呼ばれる処理
 	void Input_SwitchTargetCompleted(const FInputActionValue& InputActionValue);     // ターゲット切り替えボタンが離されたときに呼ばれる処理
 
-	// ターゲット切り替え入力の方向（左右）を保持するための変数
-	FVector2D SwitchDirection = FVector2D::ZeroVector;
+	void Input_PickUpStonesStarted(const FInputActionValue& InputActionValue);     // 「拾う」入力が押されたときに呼ばれる関数
 
 	// プレイヤーがキーを押したときに呼ばれる関数の宣言 入力タグに対応するアビリティの開始を通知する
 	void Input_AbilityInputPressed(FGameplayTag InInputTag);
