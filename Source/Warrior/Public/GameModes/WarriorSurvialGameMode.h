@@ -76,13 +76,6 @@ private:
 	void SetCurrentSurvialGameModeState(EWarriorSurvialGameModeState InState);
 	// 全ての Wave を終えたかどうかを判定する
 	bool HasFinishedAllWaves() const;
-	// 次の Wave で使用する敵クラスを非同期ロードしてキャッシュしておく
-	void PreLoadNextWaveEnemies();
-	// 現在の Wave に対応するデータテーブル行を取得する
-	FWarriorEnemyWaveSpawnerTableRow* GetCurrentWaveSpawnerTableRow() const;
-
-	int32 TrySpawnWaveEnemies();
-	bool ShouldKeepSpawnEnemies() const;
 
 	// 現在のサバイバルゲームモードの状態
 	UPROPERTY()
@@ -104,15 +97,6 @@ private:
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "WaveDefinition", meta = (AllowPrivateAccess = "true"))
 	int32 CurrentWaveCount = 1;
 
-	UPROPERTY()
-	int32 CurrentSpawnedEnemiesCounter = 0;
-
-	UPROPERTY()
-	int32 TotalSpawnedEnemiesThisWaveCounter = 0;
-
-	UPROPERTY()
-	TArray<AActor*> TargetPointsArray;
-
 	// 状態遷移のために経過時間を蓄積するタイマー
 	UPROPERTY()
 	float TimePassedSinceStart = 0.f;
@@ -128,8 +112,4 @@ private:
 	// Wave 完了後、次の Wave に移行するまでの待機時間
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "WaveDefinition", meta = (AllowPrivateAccess = "true"))
 	float WaveCompletedWaitTime = 5.f;
-
-	// SoftClass（遅延ロード用）→ 実際の UClass（ロード済み）のマッピングを保持するキャッシュ
-	UPROPERTY()
-	TMap< TSoftClassPtr < AWarriorEnemyCharacter >, UClass* > PreLoadedEnemyClassMap;
 };
