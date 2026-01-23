@@ -76,6 +76,18 @@ private:
 	void SetCurrentSurvialGameModeState(EWarriorSurvialGameModeState InState);
 	// 全ウェーブが完了したかどうかを判定する関数
 	bool HasFinishedAllWaves() const;
+	// 次のウェーブで必要な敵クラスを非同期ロードしてキャッシュする
+	void PreLoadNextWaveEnemies();
+	// 現在のウェーブに対応する DataTable の行を取得
+	FWarriorEnemyWaveSpawnerTableRow* GetCurrentWaveSpawnerTableRow() const;
+	// 敵をスポーンし、今回スポーンした数を返す
+	int32 TrySpawnWaveEnemies();
+	// まだ敵をスポーンすべきかどうか（総数に達していないか）を判定
+	bool ShouldKeepSpawnEnemies() const;
+
+	// 敵が Destroy された時に呼ばれるコールバック
+	UFUNCTION()
+	void OnEnemyDestyoed(AActor* DestroyedActor);
 
 	// 現在のサバイバルゲームモードの状態
 	UPROPERTY()
@@ -97,6 +109,18 @@ private:
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "WaveDefinition", meta = (AllowPrivateAccess = "true"))
 	int32 CurrentWaveCount = 1;
 
+	// 現在生存している敵の数
+	UPROPERTY()
+	int32 CurrentSpawnedEnemiesCounter = 0;
+
+	// このウェーブでスポーンした敵の総数
+	UPROPERTY()
+	int32 TotalSpawnedEnemiesThisWaveCounter = 0;
+
+	// スポーン位置として使う TargetPoint の配列
+	UPROPERTY()
+	TArray<AActor*> TargetPointsArray;
+
 	// ゲーム開始からの経過時間
 	UPROPERTY()
 	float TimePassedSinceStart = 0.f;
@@ -112,4 +136,8 @@ private:
 	// ウェーブ完了後の待機時間
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "WaveDefinition", meta = (AllowPrivateAccess = "true"))
 	float WaveCompletedWaitTime = 5.f;
+
+	// 非同期ロード済みの敵クラスをキャッシュするマップ
+	UPROPERTY()
+	TMap< TSoftClassPtr < AWarriorEnemyCharacter >, UClass* > PreLoadedEnemyClassMap;
 };
