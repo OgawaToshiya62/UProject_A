@@ -205,7 +205,7 @@ int32 AWarriorSurvialGameMode::TrySpawnWaveEnemies()
 			if (SpawnedEnemy)
 			{
 				// Destroy 時のコールバック登録
-				SpawnedEnemy->OnDestroyed.AddUniqueDynamic(this, &ThisClass::OnEnemyDestyoed);
+				SpawnedEnemy->OnDestroyed.AddUniqueDynamic(this, &ThisClass::OnEnemyDestroyed);
 
 				EnemiesSpawnedThisTime++;
 				TotalSpawnedEnemiesThisWaveCounter++;
@@ -227,14 +227,16 @@ int32 AWarriorSurvialGameMode::TrySpawnWaveEnemies()
 bool AWarriorSurvialGameMode::ShouldKeepSpawnEnemies() const
 {
 	// スポーンした数がウェーブの上限に達したら false
-	return TotalSpawnedEnemiesThisWaveCounter >= GetCurrentWaveSpawnerTableRow()->TotalEnemyToSpawnThisWave;
+	return TotalSpawnedEnemiesThisWaveCounter < GetCurrentWaveSpawnerTableRow()->TotalEnemyToSpawnThisWave;
 }
 
 // 敵が Destroy された時に呼ばれるコールバック
-void AWarriorSurvialGameMode::OnEnemyDestyoed(AActor* DestroyedActor)
+void AWarriorSurvialGameMode::OnEnemyDestroyed(AActor* DestroyedActor)
 {
 	// 生存中の敵数を減らす
 	CurrentSpawnedEnemiesCounter--;
+
+	Debug::Print(FString::Printf(TEXT("CurrentSpawnedEnemiesCounter:%i, TotalSpawnedEnemiesThisWaveCounter:%i"), CurrentSpawnedEnemiesCounter, TotalSpawnedEnemiesThisWaveCounter));
 
 	// まだスポーンすべき敵が残っているなら追加スポーン
 	if (ShouldKeepSpawnEnemies())
@@ -248,5 +250,18 @@ void AWarriorSurvialGameMode::OnEnemyDestyoed(AActor* DestroyedActor)
 		CurrentSpawnedEnemiesCounter = 0;
 
 		SetCurrentSurvialGameModeState(EWarriorSurvialGameModeState::WaveCompleted);
+	}
+}
+
+void AWarriorSurvialGameMode::RegisterSpawnedEnemies(const TArray<AWarriorEnemyCharacter*>& InEnemiesToRegister)
+{
+	for (AWarriorEnemyCharacter* SpawnedEnemy : InEnemiesToRegister)
+	{
+		if (SpawnedEnemy)
+		{
+			CurrentSpawnedEnemiesCounter++;
+
+			SpawnedEnemy->OnDestroyed.AddUniqueDynamic(this, &ThisClass::OnEnemyDestroyed);
+		}
 	}
 }

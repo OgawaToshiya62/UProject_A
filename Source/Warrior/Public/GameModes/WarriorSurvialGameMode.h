@@ -87,7 +87,7 @@ private:
 
 	// 敵が Destroy された時に呼ばれるコールバック
 	UFUNCTION()
-	void OnEnemyDestyoed(AActor* DestroyedActor);
+	void OnEnemyDestroyed(AActor* DestroyedActor);
 
 	// 現在のサバイバルゲームモードの状態
 	UPROPERTY()
@@ -130,7 +130,7 @@ private:
 	float SpawnNewWaveWaitTime = 5.f;
 
 	// 敵をスポーンする際の遅延時間
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "WaveDefinition", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "WaveDefinition", meta = (AllowPrivateAccess = "true"))
 	float SpawnEnemiesDelayTime = 2.f;
 
 	// ウェーブ完了後の待機時間
@@ -140,4 +140,8 @@ private:
 	// 非同期ロード済みの敵クラスをキャッシュするマップ
 	UPROPERTY()
 	TMap< TSoftClassPtr < AWarriorEnemyCharacter >, UClass* > PreLoadedEnemyClassMap;
+
+public:
+	UFUNCTION(BlueprintCallable)
+	void RegisterSpawnedEnemies(const TArray<AWarriorEnemyCharacter*>& InEnemiesToRegister);
 };
