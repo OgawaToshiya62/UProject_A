@@ -236,8 +236,6 @@ void AWarriorSurvialGameMode::OnEnemyDestroyed(AActor* DestroyedActor)
 	// 生存中の敵数を減らす
 	CurrentSpawnedEnemiesCounter--;
 
-	Debug::Print(FString::Printf(TEXT("CurrentSpawnedEnemiesCounter:%i, TotalSpawnedEnemiesThisWaveCounter:%i"), CurrentSpawnedEnemiesCounter, TotalSpawnedEnemiesThisWaveCounter));
-
 	// まだスポーンすべき敵が残っているなら追加スポーン
 	if (ShouldKeepSpawnEnemies())
 	{
