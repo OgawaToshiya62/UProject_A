@@ -9,6 +9,7 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "WarriorGameplayTags.h"
 #include "WarriorTypes/WarriorCountDownAction.h"
+#include "WarriorGameInstance.h"
 
 #include "WarriorDebugHelper.h"
 
@@ -222,6 +223,72 @@ void UWarriorFunctionLibrary::CountDown(const UObject* WorldContextObject, float
 			// 次の Tick でキャンセルされるようフラグを立てる
 			FoundAction -> CancelAction();
 		}
+	}
+}
+
+// Blueprint から WarriorGameInstance を取得するための純粋関数
+UWarriorGameInstance* UWarriorFunctionLibrary::GetWarriorGameInstance(const UObject* WorldContextObject)
+{
+	// GEngine が有効か確認
+	if (GEngine)
+	{
+		// WorldContextObject から UWorld を取得
+		if (UWorld* World = GEngine->GetWorldFromContextObject(WorldContextObject, EGetWorldErrorMode::LogAndReturnNull))
+		{
+			// World から GameInstance を取得し、指定した型にキャストして返す
+			return World->GetGameInstance<UWarriorGameInstance>();
+		}
+	}
+
+	// 取得できなかった場合は nullptr
+	return nullptr;
+}
+
+// Blueprint から入力モード（GameOnly / UIOnly）を切り替えるための関数
+void UWarriorFunctionLibrary::ToggleInputMode(const UObject* WorldContextObject, EWarriorInputMode InInputMode)
+{
+	APlayerController* PlayerController = nullptr;
+
+	// WorldContextObject から World を取得し、そこから PlayerController を取得
+	if (GEngine)
+	{
+		if (UWorld* World = GEngine->GetWorldFromContextObject(WorldContextObject, EGetWorldErrorMode::LogAndReturnNull))
+		{
+			PlayerController = World->GetFirstPlayerController();
+		}
+	}
+
+	// PlayerController が取得できなければ何もせず終了
+	if (!PlayerController)
+	{
+		return;
+	}
+
+	// UE 標準の入力モード構造体
+	FInputModeGameOnly GameOnlyMode;
+	FInputModeUIOnly UIOnlyMode;
+
+	// 指定された入力モードに応じて切り替え
+	switch (InInputMode)
+	{
+	case EWarriorInputMode::GameOnly:
+
+		// ゲーム操作のみ受け付ける
+		PlayerController->SetInputMode(GameOnlyMode);
+		PlayerController->bShowMouseCursor = false;
+
+		break;
+
+	case EWarriorInputMode::UIOnly:
+
+		// UI 操作のみ受け付ける（マウスカーソル表示）
+		PlayerController->SetInputMode(UIOnlyMode);
+		PlayerController->bShowMouseCursor = true;
+
+		break;
+
+	default:
+		break;
 	}
 }
 

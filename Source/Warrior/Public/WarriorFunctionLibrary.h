@@ -10,6 +10,7 @@
 class UWarriorAbilitySystemComponent;
 class UPawnCombatComponent;
 struct FScalableFloat;
+class UWarriorGameInstance;
 
 /**
  * 
@@ -68,6 +69,14 @@ public:
 	// Blueprint から呼び出せるカウントダウン処理
 	UFUNCTION(BlueprintCallable, Category = "Warrior|FunctionLibrary", meta = (Latent, WorldContext = "WorldContextObject", LatentInfo = "LatentInfo", ExpandEnumAsExecs = "CountDownInput|CountDownOutput", TotalTime = "1.0", UpdateInterval = "0.1"))
 	static void CountDown(const UObject* WorldContextObject, float TotalTime, float UpdateInterval,
-		float& OutRemainingTime, EWarriorCountDownActionInput CountDownInput,
-		UPARAM(DisplayName = "Output")EWarriorCountDownActionOutput& CountDownOutput, FLatentActionInfo LatentInfo);
+	float& OutRemainingTime, EWarriorCountDownActionInput CountDownInput,
+	UPARAM(DisplayName = "Output")EWarriorCountDownActionOutput& CountDownOutput, FLatentActionInfo LatentInfo);
+
+	// Blueprint から WarriorGameInstance を取得するための純粋関数
+	UFUNCTION(BlueprintPure, Category = "Warrior|FunctionLibrary", meta = (WorldContext = "WorldContextObject"))
+	static UWarriorGameInstance* GetWarriorGameInstance(const UObject* WorldContextObject);
+
+	// Blueprint から入力モード（GameOnly / UIOnly）を切り替えるための関数
+	UFUNCTION(BlueprintCallable, Category = "Warrior|FunctionLibrary", meta = (WorldContext = "WorldContextObject"))
+	static void ToggleInputMode(const UObject* WorldContextObject, EWarriorInputMode InInputMode);
 };

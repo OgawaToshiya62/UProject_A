@@ -50,3 +50,11 @@ enum class EWarriorGameDifficulty : uint8
 	Hard,
 	VeryHard
 };
+
+// ゲームの入力モードを表す列挙体
+UENUM(BlueprintType)
+enum class EWarriorInputMode : uint8
+{
+	GameOnly,
+	UIOnly
+};
