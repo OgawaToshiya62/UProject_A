@@ -36,7 +36,16 @@ class WARRIOR_API UWarriorGameInstance : public UGameInstance
 {
 	GENERATED_BODY()
 	
+public:
+	// GameInstance 初期化時に呼ばれる。ローディング画面用のデリゲート登録などを行う
+	virtual void Init() override;
+
 protected:
+	// マップ読み込み開始前に呼ばれる（ローディング画面を表示する）
+	virtual void OnPreLoadMap(const FString& MapName);
+	// マップ読み込み完了後に呼ばれる（ローディング画面を閉じる）
+	virtual void OnDestinationWorldLoaded(UWorld* LoadedWorld);
+
 	// ゲーム内で使用可能なレベルセット一覧
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TArray<FWarriorGameLevelSet> GameLevelSets;

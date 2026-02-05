@@ -7,8 +7,26 @@
 #include "Kismet/GameplayStatics.h"
 #include "Engine/TargetPoint.h"
 #include "NavigationSystem.h"
+#include "WarriorFunctionLibrary.h"
 
 #include "WarriorDebugHelper.h"
+
+// ゲーム開始時に呼ばれる初期化処理
+void AWarriorSurvialGameMode::InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage)
+{
+	// 親クラスの初期化処理を必ず呼ぶ
+	Super::InitGame(MapName, Options, ErrorMessage);
+
+	// セーブデータから難易度を読み込むための変数
+	EWarriorGameDifficulty SavedGameDifficulty;
+
+	// セーブデータが存在し、ロードに成功した場合のみ難易度を反映
+	if (UWarriorFunctionLibrary::TryLoadSavedGameDifficulty(SavedGameDifficulty))
+	{
+		// GameMode の現在の難易度をセーブされた値に更新
+		CurrentGameDifficulty = SavedGameDifficulty;
+	}
+}
 
 // ゲーム開始時に呼ばれる
 void AWarriorSurvialGameMode::BeginPlay()

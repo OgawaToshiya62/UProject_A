@@ -66,6 +66,8 @@ class WARRIOR_API AWarriorSurvialGameMode : public AWarriorBaseGameMode
 	GENERATED_BODY()
 	
 protected:
+	// ゲーム開始時に呼ばれる初期化処理
+	virtual void InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage) override;
 	// ゲーム開始時に呼ばれる。初期状態の設定などを行う
 	virtual void BeginPlay() override;
 	// 毎フレーム呼ばれる。Wave の進行管理などを行う予定

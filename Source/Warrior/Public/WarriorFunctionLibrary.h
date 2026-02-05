@@ -79,4 +79,12 @@ public:
 	// Blueprint から入力モード（GameOnly / UIOnly）を切り替えるための関数
 	UFUNCTION(BlueprintCallable, Category = "Warrior|FunctionLibrary", meta = (WorldContext = "WorldContextObject"))
 	static void ToggleInputMode(const UObject* WorldContextObject, EWarriorInputMode InInputMode);
+
+	// 現在のゲーム難易度をセーブデータに保存する
+	UFUNCTION(BlueprintCallable, Category = "Warrior|FunctionLibrary")
+	static void SaveCurrentGameDifficulty(EWarriorGameDifficulty InDifficultyToSave);
+
+	// セーブデータから難易度を読み込み、成功したら true を返す
+	UFUNCTION(BlueprintCallable, Category = "Warrior|FunctionLibrary")
+	static bool TryLoadSavedGameDifficulty(EWarriorGameDifficulty& OutSavedDifficulty);
 };

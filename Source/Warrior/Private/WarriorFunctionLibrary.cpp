@@ -10,6 +10,8 @@
 #include "WarriorGameplayTags.h"
 #include "WarriorTypes/WarriorCountDownAction.h"
 #include "WarriorGameInstance.h"
+#include "Kismet/GameplayStatics.h"
+#include "SaveGame/WarriorSaveGame.h"
 
 #include "WarriorDebugHelper.h"
 
@@ -290,5 +292,46 @@ void UWarriorFunctionLibrary::ToggleInputMode(const UObject* WorldContextObject,
 	default:
 		break;
 	}
+}
+
+void UWarriorFunctionLibrary::SaveCurrentGameDifficulty(EWarriorGameDifficulty InDifficultyToSave)
+{
+	// SaveGame オブジェクトを作成
+	USaveGame* SaveGameObject = UGameplayStatics::CreateSaveGameObject(UWarriorSaveGame::StaticClass());
+
+	// 正しくキャストできた場合のみ処理
+	if (UWarriorSaveGame* WarriorSaveGameObject = Cast<UWarriorSaveGame>(SaveGameObject))
+	{
+		// 難易度をセーブデータに書き込む
+		WarriorSaveGameObject->SavedCurrentGameDifficulty = InDifficultyToSave;
+
+		// 指定スロットに保存
+		const bool bWasSaved = UGameplayStatics::SaveGameToSlot(WarriorSaveGameObject, WarriorGameplayTags::GameData_SaveGame_Slot_1.GetTag().ToString(), 0);
+
+		Debug::Print(bWasSaved ? TEXT("Difficulty Saved") : TEXT("Difficulty NOT Saved"));
+	}
+}
+
+bool UWarriorFunctionLibrary::TryLoadSavedGameDifficulty(EWarriorGameDifficulty& OutSavedDifficulty)
+{
+	// セーブデータが存在するか確認
+	if (UGameplayStatics::DoesSaveGameExist(WarriorGameplayTags::GameData_SaveGame_Slot_1.GetTag().ToString(), 0))
+	{
+		// セーブデータをロード
+		USaveGame* SaveGameObject = UGameplayStatics::LoadGameFromSlot(WarriorGameplayTags::GameData_SaveGame_Slot_1.GetTag().ToString(), 0);
+
+		// 正しくキャストできた場合のみ処理
+		if (UWarriorSaveGame* WarriorSaveGameObject = Cast<UWarriorSaveGame>(SaveGameObject))
+		{
+			// 保存されていた難易度を出力引数にセット
+			OutSavedDifficulty = WarriorSaveGameObject->SavedCurrentGameDifficulty;
+
+			Debug::Print(TEXT("Loading Successful"), FColor::Green);
+
+			return true;
+		}
+	}
+
+	return false;
 }
 
